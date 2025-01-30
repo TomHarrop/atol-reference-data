@@ -20,6 +20,8 @@ def get_list_of_blast_nt_files(wildcards):
     return files[0:2]
 
 
+# TODO: move the results to s3
+
 rule expand_blast_db_file:
     input:
         tarfile="results/ncbi_nucleotide_blast/{filename}.tar.gz",
