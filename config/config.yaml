@@ -1,0 +1,4 @@
+taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
+blast_db_directory_url: ftp://ftp.ncbi.nlm.nih.gov/blast/db/v5
+# nt_filename_pattern: nt.[0-9]{3}.tar.gz
+nt_filename_pattern: "nt.[0-9]{3}.tar.gz"
