@@ -13,6 +13,6 @@ include: "rules/uniprot_reference_proteomes.smk"
 rule all:
     default_target: True
     input:
-        rules.upload_blast_db_files.output,
-        rules.ncbi_taxdump.output,
-        rules.download_uniprot_file.output,
+        add_bucket_to_path("ncbi_nucleotide_blast"),
+        add_bucket_to_path("taxdump/TIMESTAMP"),
+        add_bucket_to_path("uniprot_referece_proteomes/reference_proteomes.tar.gz"),
