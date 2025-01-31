@@ -5,6 +5,14 @@
 def get_list_of_blast_nt_files(wildcards):
     filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")
     listing_file = checkpoints.list_blast_db_directory.get().output.listing
+    # if isinstance(listing_file, snakemake.io._IOFile):
+    #     logger.error("yes")
+    #     logger.error(listing_file)
+    #     logger.error(listing_file._file)
+    # else:
+    #     logger.error("no")
+    # print(type(listing_file))
+    # quit(1)
     files = get_files_from_listing_file(listing_file, filename_pattern)
     return files
 
@@ -26,6 +34,7 @@ rule expand_blast_db_files:
             "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
             filename=get_list_of_blast_nt_files,
         ),
+        listing="results/ncbi_nucleotide_blast_files/listing.txt",
     output:
         database_directory=temp(directory("results/ncbi_nucleotide_blast")),
     threads: 12
