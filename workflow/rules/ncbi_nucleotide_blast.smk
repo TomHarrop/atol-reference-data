@@ -47,8 +47,8 @@ rule download_blast_db_file:
     output:
         tarfile=temp("results/ncbi_nucleotide_blast_files/{filename}.tar.gz"),
     params:
-        file_url=lambda wildcards: f"{config["blast_db_directory_url"]}/{wildcards.filename}.tar.gz",
-        md5_url=lambda wildcards: f"{config["blast_db_directory_url"]}/{wildcards.filename}.tar.gz.md5",
+        file_url=lambda wildcards: f"{config['blast_db_directory_url']}/{wildcards.filename}.tar.gz",
+        md5_url=lambda wildcards: f"{config['blast_db_directory_url']}/{wildcards.filename}.tar.gz.md5",
     log:
         "logs/download_blast_db_file/{filename}.log",
     container:
