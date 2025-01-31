@@ -16,7 +16,7 @@ def get_uniprot_url(wildcards):
 
 rule download_uniprot_file:
     input:
-        listing=local("results/uniprot_referece_proteomes/listing.txt"),
+        listing="results/uniprot_referece_proteomes/listing.txt",
     output:
         tarfile=add_bucket_to_path(
             "uniprot_referece_proteomes/reference_proteomes.tar.gz"
@@ -35,7 +35,7 @@ checkpoint list_uniprot_directory:
     params:
         uniprot_directory_url=config["uniprot_directory_url"],
     output:
-        listing=local("results/uniprot_referece_proteomes/listing.txt"),
+        listing="results/uniprot_referece_proteomes/listing.txt",
     shadow:
         "minimal"
     container:
