@@ -1,7 +1,3 @@
-# We don't know the number of nt files, or the names of the files after the tar
-# is expanded, so we need two checkpoints.
-
-
 @cache
 def get_list_of_blast_nt_files(wildcards):
     filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")
@@ -10,37 +6,18 @@ def get_list_of_blast_nt_files(wildcards):
     return files[0:2]
 
 
-def get_db_file(wildcards):
-    all_files = get_db_filenames(wildcards)
-    my_db_file = [x for x in all_files if x.name == wildcards.filename]
-    if len(my_db_file) != 1:
-        logger.error(my_db_file)
-        raise ValueError(f"Only expecting one file mathcing {wildcards.filename}")
-    return my_db_file[0]
-
-
-@cache
-def get_db_filenames(wildcards):
-    outdir = Path(checkpoints.expand_blast_db_files.get().output.database_directory)
-    return [x for x in outdir.glob("*")]
-
-
-def get_ncbi_nucleotide_blast_database_files(wildcards):
-    return [add_bucket_to_path(x) for x in get_db_filenames(wildcards)]
-
-
 rule upload_blast_db_files:
     input:
-        get_db_file,
+        "results/ncbi_nucleotide_blast",
     output:
-        add_bucket_to_path("results/ncbi_nucleotide_blast/{filename}"),
+        add_bucket_to_path("ncbi_nucleotide_blast"),
     container:
         "docker://debian:stable-20250113"
     shell:
-        "cp {input} {output}"
+        "cp -r {input} {output}"
 
 
-checkpoint expand_blast_db_files:
+rule expand_blast_db_files:
     input:
         tarfiles=expand(
             "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
@@ -96,9 +73,3 @@ checkpoint list_blast_db_directory:
     shell:
         "wget --no-remove-listing {params.blast_db_directory_url}/ &> {log} && "
         "mv .listing {output.listing}"
-
-
-rule ncbi_nucleotide_blast_database:
-    default_target: True
-    input:
-        get_ncbi_nucleotide_blast_database_files,

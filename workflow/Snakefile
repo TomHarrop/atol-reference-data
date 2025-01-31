@@ -10,12 +10,9 @@ include: "rules/ncbi_taxdump.smk"
 include: "rules/uniprot_reference_proteomes.smk"
 
 
-# TODO: move the results to s3
-
-
 rule all:
     default_target: True
     input:
-        rules.ncbi_nucleotide_blast_database.output,
+        rules.upload_blast_db_files.output,
         rules.ncbi_taxdump.output,
         rules.download_uniprot_file.output,
