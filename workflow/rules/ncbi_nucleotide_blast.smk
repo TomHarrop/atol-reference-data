@@ -3,7 +3,7 @@ def get_list_of_blast_nt_files(wildcards):
     filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")
     listing_file = checkpoints.list_blast_db_directory.get().output.listing
     files = get_files_from_listing_file(listing_file, filename_pattern)
-    return files[0:2]
+    return files
 
 
 rule upload_blast_db_files:
