@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 def get_uniprot_url(wildcards):
     uniprot_directory_url = config["uniprot_directory_url"]
     filename_pattern = re.compile("^" + config["uniprot_filename_pattern"] + "$")

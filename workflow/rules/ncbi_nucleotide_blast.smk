@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 @cache
 def get_list_of_blast_nt_files(wildcards):
     filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")

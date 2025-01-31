@@ -17,7 +17,7 @@ unset SBATCH_EXPORT
 # Application specific commands:
 set -eux
 
-source /software/projects/pawsey1132/tharrop/atol-reference-data/venv
+source /software/projects/pawsey1132/tharrop/atol-reference-data/venv/bin/activate
 
 printf "TMPDIR: %s\n" "${TMPDIR}"
 printf "SLURM_CPUS_ON_NODE: %s\n" "${SLURM_CPUS_ON_NODE}"

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import re
 from functools import cache
 from snakemake.logging import logger

@@ -1,7 +1,6 @@
 ---
 executor: cluster-generic
-cluster-generic-submit-cmd:
-  mkdir -p slurm_logs/{rule} &&
+cluster-generic-submit-cmd: mkdir -p slurm_logs/{rule} &&
   sbatch
   --time={resources.runtime}
   {resources.partitionFlag}
