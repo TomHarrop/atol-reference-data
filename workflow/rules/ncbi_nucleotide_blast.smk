@@ -26,7 +26,7 @@ rule expand_blast_db_files:
             "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
             filename=get_list_of_blast_nt_files,
         ),
-        listing="results/ncbi_nucleotide_blast_files/listing.txt",
+        listing=local("results/ncbi_nucleotide_blast_files/listing.txt"),
     output:
         database_directory=temp(directory("results/ncbi_nucleotide_blast")),
     threads: 12
@@ -44,7 +44,7 @@ rule expand_blast_db_files:
 
 rule download_blast_db_file:
     input:
-        listing="results/ncbi_nucleotide_blast_files/listing.txt",
+        listing=local("results/ncbi_nucleotide_blast_files/listing.txt"),
     output:
         tarfile=temp("results/ncbi_nucleotide_blast_files/{filename}.tar.gz"),
     params:
@@ -67,7 +67,7 @@ checkpoint list_blast_db_directory:
     params:
         blast_db_directory_url=config["blast_db_directory_url"],
     output:
-        listing="results/ncbi_nucleotide_blast_files/listing.txt",
+        listing=local("results/ncbi_nucleotide_blast_files/listing.txt"),
     log:
         "logs/list_blast_db_directory.log",
     shadow:
