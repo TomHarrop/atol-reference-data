@@ -1,0 +1,104 @@
+# We don't know the number of nt files, or the names of the files after the tar
+# is expanded, so we need two checkpoints.
+
+
+@cache
+def get_list_of_blast_nt_files(wildcards):
+    filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")
+    listing_file = checkpoints.list_blast_db_directory.get().output.listing
+    files = get_files_from_listing_file(listing_file, filename_pattern)
+    return files[0:2]
+
+
+def get_db_file(wildcards):
+    all_files = get_db_filenames(wildcards)
+    my_db_file = [x for x in all_files if x.name == wildcards.filename]
+    if len(my_db_file) != 1:
+        logger.error(my_db_file)
+        raise ValueError(f"Only expecting one file mathcing {wildcards.filename}")
+    return my_db_file[0]
+
+
+@cache
+def get_db_filenames(wildcards):
+    outdir = Path(checkpoints.expand_blast_db_files.get().output.database_directory)
+    return [x for x in outdir.glob("*")]
+
+
+def get_ncbi_nucleotide_blast_database_files(wildcards):
+    return [add_bucket_to_path(x) for x in get_db_filenames(wildcards)]
+
+
+rule upload_blast_db_files:
+    input:
+        get_db_file,
+    output:
+        add_bucket_to_path("results/ncbi_nucleotide_blast/{filename}"),
+    container:
+        "docker://debian:stable-20250113"
+    shell:
+        "cp {input} {output}"
+
+
+checkpoint expand_blast_db_files:
+    input:
+        tarfiles=expand(
+            "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
+            filename=get_list_of_blast_nt_files,
+        ),
+    output:
+        database_directory=temp(directory("results/ncbi_nucleotide_blast")),
+    threads: 12
+    shadow:
+        "minimal"
+    container:
+        "docker://debian:stable-20250113"
+    shell:
+        "mkdir -p {output.database_directory} && "
+        "find {input.tarfiles} | "
+        "xargs --max-procs={threads} "
+        "-I{{}} tar zxf {{}} -C {output.database_directory} && "
+        "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
+
+
+rule download_blast_db_file:
+    input:
+        listing="results/ncbi_nucleotide_blast_files/listing.txt",
+    output:
+        tarfile=temp("results/ncbi_nucleotide_blast_files/{filename}.tar.gz"),
+    params:
+        file_url=lambda wildcards: f"{config["blast_db_directory_url"]}/{wildcards.filename}.tar.gz",
+        md5_url=lambda wildcards: f"{config["blast_db_directory_url"]}/{wildcards.filename}.tar.gz.md5",
+    log:
+        "logs/download_blast_db_file/{filename}.log",
+    container:
+        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
+    shadow:
+        "minimal"
+    shell:
+        "wget {params.file_url} -O {wildcards.filename}.tar.gz &> {log} && "
+        "wget {params.md5_url} -O {wildcards.filename}.tar.gz.md5 &>> {log} && "
+        "md5sum -c {wildcards.filename}.tar.gz.md5 &>> {log} && "
+        "mv {wildcards.filename}.tar.gz {output.tarfile}"
+
+
+checkpoint list_blast_db_directory:
+    params:
+        blast_db_directory_url=config["blast_db_directory_url"],
+    output:
+        listing="results/ncbi_nucleotide_blast_files/listing.txt",
+    log:
+        "logs/list_blast_db_directory.log",
+    shadow:
+        "minimal"
+    container:
+        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
+    shell:
+        "wget --no-remove-listing {params.blast_db_directory_url}/ &> {log} && "
+        "mv .listing {output.listing}"
+
+
+rule ncbi_nucleotide_blast_database:
+    default_target: True
+    input:
+        get_ncbi_nucleotide_blast_database_files,

@@ -1,106 +1,21 @@
 #!/usr/bin/env python3
 
-import re
-from functools import cache
-
 
 configfile: "config/config.yaml"
 
 
-@cache
-def get_list_of_blast_nt_files(wildcards):
-    filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")
-    listing_file = checkpoints.list_blast_db_directory.get().output.listing
-    files = []
-    with open(listing_file) as f:
-        for line in f:
-            splitline = line.split()[-1]
-            if re.search(filename_pattern, splitline):
-                files.append(splitline.rstrip(".tar.gz"))
-    return files[0:2]
+include: "rules/common.smk"
+include: "rules/ncbi_nucleotide_blast.smk"
+include: "rules/ncbi_taxdump.smk"
+include: "rules/uniprot_reference_proteomes.smk"
 
 
 # TODO: move the results to s3
 
-rule expand_blast_db_file:
+
+rule all:
+    default_target: True
     input:
-        tarfile="results/ncbi_nucleotide_blast/{filename}.tar.gz",
-    output:
-        timestamp="results/ncbi_nucleotide_blast/{filename}.TIMESTAMP",
-    params:
-        outdir=lambda wildcards, output: Path(output.timestamp).parent,
-    container:
-        "docker://debian:stable-20250113"
-    shell:
-        "mkdir -p {params.outdir} && tar xf {input.tarfile} -C {params.outdir} && "
-        "printf $(date -Iseconds) > {output.timestamp}"
-
-
-rule download_blast_db_file:
-    output:
-        tarfile="results/ncbi_nucleotide_blast/{filename}.tar.gz",
-    params:
-        file_url=lambda wildcards: f"{config["blast_db_directory_url"]}/{wildcards.filename}.tar.gz",
-        md5_url=lambda wildcards: f"{config["blast_db_directory_url"]}/{wildcards.filename}.tar.gz.md5",
-    container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
-    shadow:
-        "minimal"
-    shell:
-        "wget {params.file_url} -O {wildcards.filename}.tar.gz && "
-        "wget {params.md5_url} -O {wildcards.filename}.tar.gz.md5 && "
-        "md5sum -c {wildcards.filename}.tar.gz.md5 && "
-        "mv {wildcards.filename}.tar.gz {output.tarfile}"
-
-
-rule test_target:
-    input:
-        expand(
-            rules.expand_blast_db_file.output.timestamp,
-            filename=get_list_of_blast_nt_files,
-        ),
-
-
-checkpoint list_blast_db_directory:
-    params:
-        blast_db_directory_url=config["blast_db_directory_url"],
-    output:
-        listing="results/ncbi_nucleotide_blast/listing.txt",
-    threads: 4
-    shadow:
-        "minimal"
-    container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
-    shell:
-        "wget --no-remove-listing {params.blast_db_directory_url}/ && "
-        "mv .listing {output.listing}"
-
-
-rule ncbi_taxdump:
-    input:
-        taxdump=storage.ftp(config["taxdump_url"]),
-    output:
-        "results/taxdump/citations.dmp",
-        "results/taxdump/delnodes.dmp",
-        "results/taxdump/division.dmp",
-        "results/taxdump/excludedfromtype.dmp",
-        "results/taxdump/fullnamelineage.dmp",
-        "results/taxdump/gencode.dmp",
-        "results/taxdump/host.dmp",
-        "results/taxdump/images.dmp",
-        "results/taxdump/merged.dmp",
-        "results/taxdump/names.dmp",
-        "results/taxdump/nodes.dmp",
-        "results/taxdump/rankedlineage.dmp",
-        "results/taxdump/taxidlineage.dmp",
-        "results/taxdump/typematerial.dmp",
-        "results/taxdump/typeoftype.dmp",
-        timestamp="results/taxdump/TIMESTAMP",
-    params:
-        outdir=lambda wildcards, output: Path(output[0]).parent,
-    container:
-        "docker://debian:stable-20250113"
-    shell:
-        "mkdir -p {params.outdir} && "
-        "tar -xzf {input.taxdump} -C {params.outdir} && "
-        "printf $(date -Iseconds) > {output.timestamp}"
+        rules.ncbi_nucleotide_blast_database.output,
+        rules.ncbi_taxdump.output,
+        rules.download_uniprot_file.output,

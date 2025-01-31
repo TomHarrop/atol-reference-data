@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#SBATCH --job-name=atol_refdata
+#SBATCH --time=1-00
+#SBATCH --cpus-per-task=2
+#SBATCH --ntasks=1
+#SBATCH --mem=8g
+#SBATCH --output=sm.slurm.out
+#SBATCH --error=sm.slurm.err
+
+# Dependencies
+module load python/3.11.6
+module load singularity/4.1.0-nohost
+
+unset SBATCH_EXPORT
+
+# Application specific commands:
+set -eux
+
+source /software/projects/pawsey1132/tharrop/atol_refdata/venv/bin/activate
+
+printf "TMPDIR: %s\n" "${TMPDIR}"
+printf "SLURM_CPUS_ON_NODE: %s\n" "${SLURM_CPUS_ON_NODE}"
+
+if [ -z "${SINGULARITY_CACHEDIR}" ]; then
+    export SINGULARITY_CACHEDIR=/software/projects/pawsey1132/tharrop/.singularity
+    export APPTAINER_CACHEDIR="${SINGULARITY_CACHEDIR}"
+fi
+
+# run the pipeline with notemp to avoid re-downloading the data
+snakemake \
+    --profile profiles/pawsey_v8 \
+    --retries 0 \
+    --keep-going \
+    --notemp \
+    --cores 12 \
+    --local-cores "${SLURM_CPUS_ON_NODE}"
+
+# delete if everything is there, disabled for now
+# if [ $? -eq 0 ]; then
+#     printf "Deleting temp files"
+#     snakemake \
+#         --profile profiles/pawsey_v8 \
+#         --delete-temp-output \
+#         --local-cores "${SLURM_CPUS_ON_NODE}"
+# fi
