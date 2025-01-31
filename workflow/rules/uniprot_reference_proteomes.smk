@@ -14,15 +14,16 @@ def get_uniprot_url(wildcards):
     return f"{uniprot_directory_url}/{files[0]}.tar.gz"
 
 
-
-
 rule download_uniprot_file:
+    localrule: False
     input:
         listing=local("results/uniprot_referece_proteomes/listing.txt"),
     output:
         tarfile=add_bucket_to_path(
             "uniprot_referece_proteomes/reference_proteomes.tar.gz"
         ),
+    log:
+        "logs/download_uniprot_file.log",
     params:
         file_url=get_uniprot_url,
     container:
@@ -30,7 +31,7 @@ rule download_uniprot_file:
     shadow:
         "minimal"
     shell:
-        "wget {params.file_url} -O {output.tarfile}"
+        "wget {params.file_url} -O {output.tarfile} &> {log}"
 
 
 checkpoint list_uniprot_directory:
