@@ -35,17 +35,7 @@ singularity-args: "-B $PWD,$TMPDIR,/scratch \
   --containall --cleanenv --writable-tmpfs"
 singularity-prefix: $SINGULARITY_CACHEDIR/library
 apptainer-prefix: $SINGULARITY_CACHEDIR/library
-# see https://snakemake.github.io/snakemake-plugin-catalog/plugins/storage/fs.html#further-details
-default-storage-provider: fs
-local-storage-prefix: $MYSCRATCH/atol-reference-data/.snakemake
-default-storage-prefix: $PWD
-remote-job-local-storage-prefix: $MYSCRATCH/atol-reference-data/.snakemake
 shadow-prefix: $MYSCRATCH/atol-reference-data/.snakemake
-shared-fs-usage:
-  - persistence
-  - software-deployment
-  - sources
-  - source-cache
 # s3
 storage-s3-endpoint-url: https://projects.pawsey.org.au
 storage-s3-access-key: $AWS_ACCESS_KEY_ID

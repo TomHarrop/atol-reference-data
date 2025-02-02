@@ -9,7 +9,7 @@ def get_uniprot_url(wildcards):
     if len(files) != 1:
         logger.error(files)
         raise ValueError(
-            f"Only expecting one file mathcing {filename_pattern} in {uniprot_directory_url}"
+            f"Only expecting one file matching {filename_pattern} in {uniprot_directory_url}"
         )
     return f"{uniprot_directory_url}/{files[0]}.tar.gz"
 
@@ -22,10 +22,12 @@ rule download_uniprot_file:
         tarfile=add_bucket_to_path(
             "uniprot_referece_proteomes/reference_proteomes.tar.gz"
         ),
-    log:
-        "logs/download_uniprot_file.log",
     params:
         file_url=get_uniprot_url,
+    resources:
+        runtime=60,
+    log:
+        "logs/download_uniprot_file.log",
     container:
         "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
     shadow:
