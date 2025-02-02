@@ -5,10 +5,10 @@ configfile: "config/config.yaml"
 
 
 include: "rules/common.smk"
+include: "rules/busco_databases.smk"
 include: "rules/ncbi_nucleotide_blast.smk"
 include: "rules/ncbi_taxdump.smk"
 include: "rules/uniprot_reference_proteomes.smk"
-
 
 rule all:
     default_target: True

@@ -15,7 +15,6 @@ def get_uniprot_url(wildcards):
 
 
 rule download_uniprot_file:
-    localrule: False
     input:
         listing="results/uniprot_referece_proteomes/listing.txt",
     output:

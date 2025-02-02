@@ -21,7 +21,6 @@ rule upload_blast_db_files:
 
 
 rule expand_blast_db_files:
-    localrule: False
     input:
         tarfiles=expand(
             "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
@@ -44,7 +43,6 @@ rule expand_blast_db_files:
 
 
 rule download_blast_db_file:
-    localrule: False
     input:
         listing="results/ncbi_nucleotide_blast_files/listing.txt",
     output:
