@@ -1,5 +1,6 @@
 blast_db_directory_url: ftp://ftp.ncbi.nlm.nih.gov/blast/db/v5
-busco_directory_url: https://busco-data.ezlab.org/v5/data/
+busco_directory_url: https://busco-data.ezlab.org/v5/data
+busco_manifest_path: file_versions.tsv
 nt_filename_pattern: "nt.[0-9]{3}.tar.gz"
 output_bucket: "s3://pawsey1132.atol.refdata.v0"
 taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
