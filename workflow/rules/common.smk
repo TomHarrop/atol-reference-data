@@ -43,5 +43,18 @@ def get_files_from_listing_file(listing_file, filename_pattern):
 
 
 # register storage for the workflow
-storage output:
-    provider=urlparse(output_prefix).scheme
+try:
+    storage output:
+        provider=urlparse(output_prefix).scheme
+except NameError as e:
+    logger.error(
+        """
+Specify the output_prefix in config/config.yaml. Use snakemake prefixes, e.g.
+s3://bucket.name/path for s3, or fs://path/to/directory for local folders. The
+endpoint is currently configured in the profile.
+
+For s3 configure the endpoint
+and credentials via the profile or command line.
+        """
+    )
+    raise e
