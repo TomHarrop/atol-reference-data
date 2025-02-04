@@ -14,7 +14,7 @@ include: "rules/uniprot_reference_proteomes.smk"
 rule all:
     default_target: True
     input:
-        add_bucket_to_path("busco_databases"),
-        add_bucket_to_path("ncbi_nucleotide_blast"),
-        add_bucket_to_path("taxdump/TIMESTAMP"),
-        add_bucket_to_path("uniprot_referece_proteomes/reference_proteomes.tar.gz"),
+        to_storage("busco_databases"),
+        to_storage("ncbi_nucleotide_blast"),
+        to_storage("taxdump/TIMESTAMP"),
+        to_storage("uniprot_referece_proteomes/reference_proteomes.tar.gz"),

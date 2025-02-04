@@ -13,7 +13,7 @@ rule upload_blast_db_files:
     input:
         "results/ncbi_nucleotide_blast",
     output:
-        add_bucket_to_path("ncbi_nucleotide_blast"),
+        to_storage("ncbi_nucleotide_blast"),
     container:
         "docker://debian:stable-20250113"
     shell:

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from urllib.parse import urlparse
+
 import re
 from functools import cache
 from snakemake.logging import logger
@@ -12,12 +14,17 @@ configfile: "config/config.yaml"
 globals().update(config)
 
 
-def add_bucket_to_path(path_string):
-    try:
-        return storage.s3(f"{output_bucket}/{path_string}")
-    except NameError as e:
-        logger.error("ERROR: output_bucket is not defined in config.yaml")
-        raise e
+def get_storage_prefix(output_prefix):
+    output_prefix_url = urlparse(output_prefix)
+    netloc = output_prefix_url.netloc.lstrip("/")
+    path = output_prefix_url.path.lstrip("/")
+    return Path(netloc, path).as_posix()
+
+
+def to_storage(path_string, storage_prefix=None, registered_storage=storage.output):
+    if storage_prefix is None:
+        storage_prefix = get_storage_prefix(output_prefix)
+    return storage(f"{storage_prefix}/{path_string}")
 
 
 def get_files_from_listing_file(listing_file, filename_pattern):
@@ -33,3 +40,8 @@ def get_files_from_listing_file(listing_file, filename_pattern):
             f"No files found in {listing_file} matching {filename_pattern}"
         )
     return files
+
+
+# register storage for the workflow
+storage output:
+    provider=urlparse(output_prefix).scheme

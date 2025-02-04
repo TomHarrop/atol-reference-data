@@ -3,7 +3,7 @@
 
 def get_busco_databases_target(wildcards):
     manifest = read_manifest(wildcards)
-    return list(f"results/busco_databases/{x}" for x in manifest.keys())[0:2]
+    return list(f"results/busco_databases/{x}" for x in manifest.keys())
 
 
 def get_busco_manifest_url(wildcards):
@@ -96,8 +96,9 @@ checkpoint download_busco_manifest:
 rule busco_databases_target:
     input:
         get_busco_databases_target,
+        "results/busco_lineage_files/file_versions.tsv",
     output:
-        add_bucket_to_path("busco_databases"),
+        to_storage("busco_databases"),
     params:
         parent_dir=lambda wildcards, input: Path(input[0]).parent,
     container:

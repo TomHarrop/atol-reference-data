@@ -18,7 +18,7 @@ rule download_uniprot_file:
     input:
         listing="results/uniprot_referece_proteomes/listing.txt",
     output:
-        tarfile=add_bucket_to_path(
+        tarfile=to_storage(
             "uniprot_referece_proteomes/reference_proteomes.tar.gz"
         ),
     params:
