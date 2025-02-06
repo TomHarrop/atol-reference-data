@@ -8,4 +8,4 @@ output_prefix: "s3://pawsey1132.atol.refdata.v0"
 # output_prefix: "fs://test/results"
 taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
 uniprot_directory_url: ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes
-uniprot_filename_pattern: "Reference_Proteomes_2024_06.tar.gz"
+uniprot_filename_pattern: "Reference_Proteomes_\\d{4}_\\d{2}.tar.gz"

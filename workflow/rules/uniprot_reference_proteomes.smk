@@ -18,19 +18,17 @@ rule download_uniprot_file:
     input:
         listing="results/uniprot_referece_proteomes/listing.txt",
     output:
-        tarfile=to_storage(
-            "uniprot_referece_proteomes/reference_proteomes.tar.gz"
-        ),
+        tarfile=to_storage("uniprot_referece_proteomes/reference_proteomes.tar.gz"),
     params:
         file_url=get_uniprot_url,
     resources:
         runtime=60,
     log:
         "logs/download_uniprot_file.log",
-    container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
     shadow:
         "minimal"
+    container:
+        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
     shell:
         "wget {params.file_url} -O {output.tarfile} &> {log}"
 
@@ -40,10 +38,12 @@ checkpoint list_uniprot_directory:
         uniprot_directory_url=config["uniprot_directory_url"],
     output:
         listing="results/uniprot_referece_proteomes/listing.txt",
+    log:
+        "logs/list_uniprot_directory.log",
     shadow:
         "minimal"
     container:
         "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
     shell:
-        "wget --no-remove-listing {params.uniprot_directory_url}/ && "
+        "wget --no-remove-listing {params.uniprot_directory_url}/ &> {log} && "
         "mv .listing {output.listing}"
