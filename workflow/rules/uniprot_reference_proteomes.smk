@@ -22,7 +22,7 @@ rule download_uniprot_file:
     params:
         file_url=get_uniprot_url,
     resources:
-        runtime=240,
+        runtime=400,
     log:
         "logs/download_uniprot_file.log",
     shadow:
