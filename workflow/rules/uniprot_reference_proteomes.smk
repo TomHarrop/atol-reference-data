@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 
-def get_uniprot_url(wildcards):
+def get_uniprot_url(wildcards, input):
     uniprot_directory_url = config["uniprot_directory_url"]
     filename_pattern = re.compile("^" + config["uniprot_filename_pattern"] + "$")
-    listing_file = checkpoints.list_uniprot_directory.get().output.listing
+    listing_file = input.listing
     files = get_files_from_listing_file(listing_file, filename_pattern)
     if len(files) != 1:
         logger.error(files)
@@ -33,7 +33,7 @@ rule download_uniprot_file:
         "wget {params.file_url} -O {output.tarfile} &> {log}"
 
 
-checkpoint list_uniprot_directory:
+rule list_uniprot_directory:
     params:
         uniprot_directory_url=config["uniprot_directory_url"],
     output:
