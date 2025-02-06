@@ -28,8 +28,8 @@ if [ -z "${SINGULARITY_CACHEDIR}" ]; then
 fi
 
 # what's up with the network?
-ping -W 1 -c 5 8.8.8.8
-curl -Iv ftp.ncbi.nih.gov
+# ping -W 1 -c 5 8.8.8.8
+# curl -Iv ftp.ncbi.nih.gov
 
 # run the pipeline with notemp to avoid re-downloading the data
 snakemake \
@@ -40,7 +40,7 @@ snakemake \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
     --touch \
-    expand_uniprot_file
+    upload_uniprot_files
 
 # delete if everything is there, disabled for now
 # if [ $? -eq 0 ]; then
