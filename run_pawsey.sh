@@ -39,7 +39,6 @@ snakemake \
     --notemp \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    --touch \
     upload_uniprot_files
 
 # delete if everything is there, disabled for now
