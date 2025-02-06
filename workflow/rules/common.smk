@@ -18,13 +18,19 @@ def get_storage_prefix(output_prefix):
     output_prefix_url = urlparse(output_prefix)
     netloc = output_prefix_url.netloc.lstrip("/")
     path = output_prefix_url.path.lstrip("/")
-    return Path(netloc, path).as_posix()
+    return (output_prefix_url.scheme, Path(netloc, path).as_posix())
 
 
 def to_storage(path_string, storage_prefix=None, registered_storage=storage.output):
     if storage_prefix is None:
-        storage_prefix = get_storage_prefix(output_prefix)
-    return storage(f"{storage_prefix}/{path_string}")
+        scheme, storage_prefix = get_storage_prefix(output_prefix)
+    if scheme == "s3":
+        return registered_storage(f"{scheme}://{storage_prefix}/{path_string}")
+    elif scheme == "fs":
+        return registered_storage(f"{storage_prefix}/{path_string}")
+    else:
+        raise NotImplementedError(f"Unknown storage scheme {scheme}")
+
 
 
 def get_files_from_listing_file(listing_file, filename_pattern):
