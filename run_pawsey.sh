@@ -34,7 +34,8 @@ snakemake \
     --keep-going \
     --notemp \
     --cores 12 \
-    --local-cores "${SLURM_CPUS_ON_NODE}"
+    --local-cores "${SLURM_CPUS_ON_NODE}" \
+    ncbi_taxdump
 
 # delete if everything is there, disabled for now
 # if [ $? -eq 0 ]; then
