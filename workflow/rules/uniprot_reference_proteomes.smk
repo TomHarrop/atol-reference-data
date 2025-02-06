@@ -24,19 +24,22 @@ rule upload_uniprot_files:
     shell:
         "cp -r {input} {output}"
 
+
 rule expand_uniprot_file:
     input:
         tarfile="results/uniprot_reference_proteome_files/reference_proteomes.tar.gz",
     output:
         database_directory=temp(directory("results/uniprot_reference_proteomes")),
-    threads: 12
+    threads: 2
+    resources:
+        runtime=30,
     shadow:
         "minimal"
     container:
-        "docker://debian:stable-20250113"
+        "docker://quay.io/biocontainers/pigz:2.8"
     shell:
         "mkdir -p {output.database_directory} && "
-        "tar -xzf {input.tarfile} -C {output.database_directory} && "
+        "pigz -p {threads} -dc {input.tarfile} | tar -xv -C {output.database_directory} && "
         "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
 
 
