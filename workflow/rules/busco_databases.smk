@@ -44,6 +44,15 @@ def read_manifest(wildcards):
     return lineage_to_hash
 
 
+def check_concurrent_busco_downloads(wildcards):
+    if "concurrent_busco_downloads" in workflow.resource_settings.resources:
+        return 1
+    else:
+        raise ValueError(
+            "You must set the number of concurrent_busco_downloads in the profile or on the command line"
+        )
+
+
 rule expand_busco_lineage_files:
     input:
         "results/busco_lineage_files/{lineage}.tar.gz",
@@ -71,6 +80,13 @@ rule download_busco_lineage_files:
         lineage_hash=get_lineage_hash,
     log:
         "logs/download_busco_lineage_files/{lineage}.log",
+    resources:
+        # The BUSCO server returns 503 if you hit it with a lot of parallel
+        # downloads. This arbitrary resource limits the number of concurrent
+        # downloads. Set the maximum in the profile, e.g. 
+        # resources:
+        #  - concurrent_busco_downloads=5
+        concurrent_busco_downloads=check_concurrent_busco_downloads,
     shadow:
         "minimal"
     container:
