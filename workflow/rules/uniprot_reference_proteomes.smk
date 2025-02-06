@@ -16,13 +16,13 @@ def get_uniprot_url(wildcards):
 
 rule download_uniprot_file:
     input:
-        listing="results/uniprot_referece_proteomes/listing.txt",
+        listing="results/uniprot_reference_proteomes/listing.txt",
     output:
-        tarfile=to_storage("uniprot_referece_proteomes/reference_proteomes.tar.gz"),
+        tarfile=temp("results/uniprot_reference_proteomes/reference_proteomes.tar.gz"),
     params:
         file_url=get_uniprot_url,
     resources:
-        runtime=60,
+        runtime=240,
     log:
         "logs/download_uniprot_file.log",
     shadow:
@@ -37,7 +37,7 @@ checkpoint list_uniprot_directory:
     params:
         uniprot_directory_url=config["uniprot_directory_url"],
     output:
-        listing="results/uniprot_referece_proteomes/listing.txt",
+        listing="results/uniprot_reference_proteomes/listing.txt",
     log:
         "logs/list_uniprot_directory.log",
     shadow:
