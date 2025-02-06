@@ -14,11 +14,39 @@ def get_uniprot_url(wildcards, input):
     return f"{uniprot_directory_url}/{files[0]}.tar.gz"
 
 
+rule upload_uniprot_files:
+    input:
+        "results/uniprot_reference_proteomes",
+    output:
+        to_storage("uniprot_reference_proteomes"),
+    container:
+        "docker://debian:stable-20250113"
+    shell:
+        "cp -r {input} {output}"
+
+rule expand_uniprot_file:
+    input:
+        tarfile="results/uniprot_reference_proteome_files/reference_proteomes.tar.gz",
+    output:
+        database_directory=temp(directory("results/uniprot_reference_proteomes")),
+    threads: 12
+    shadow:
+        "minimal"
+    container:
+        "docker://debian:stable-20250113"
+    shell:
+        "mkdir -p {output.database_directory} && "
+        "tar -xzf {input.tarfile} -C {output.database_directory} && "
+        "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
+
+
 rule download_uniprot_file:
     input:
-        listing="results/uniprot_reference_proteomes/listing.txt",
+        listing="results/uniprot_reference_proteome_files/listing.txt",
     output:
-        tarfile=temp("results/uniprot_reference_proteomes/reference_proteomes.tar.gz"),
+        tarfile=temp(
+            "results/uniprot_reference_proteome_files/reference_proteomes.tar.gz"
+        ),
     params:
         file_url=get_uniprot_url,
     resources:
@@ -37,7 +65,7 @@ rule list_uniprot_directory:
     params:
         uniprot_directory_url=config["uniprot_directory_url"],
     output:
-        listing="results/uniprot_reference_proteomes/listing.txt",
+        listing="results/uniprot_reference_proteome_files/listing.txt",
     log:
         "logs/list_uniprot_directory.log",
     shadow:

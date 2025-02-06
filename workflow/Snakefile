@@ -17,4 +17,4 @@ rule all:
         to_storage("busco_databases"),
         to_storage("ncbi_nucleotide_blast"),
         to_storage("taxdump/TIMESTAMP"),
-        to_storage("uniprot_referece_proteomes/reference_proteomes.tar.gz"),
+        to_storage("uniprot_reference_proteomes"),
