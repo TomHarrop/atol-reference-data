@@ -32,7 +32,7 @@ rule expand_uniprot_file:
         database_directory=temp(directory("results/uniprot_reference_proteomes")),
     threads: 2
     resources:
-        runtime=30,
+        runtime=120,
     shadow:
         "minimal"
     container:
