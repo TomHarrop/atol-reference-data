@@ -20,7 +20,7 @@ rule upload_uniprot_files:
     output:
         to_storage("uniprot_reference_proteomes"),
     resources:
-        runtime=20,
+        runtime=40,
     container:
         "docker://debian:stable-20250113"
     shell:
