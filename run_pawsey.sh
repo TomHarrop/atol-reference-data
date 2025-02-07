@@ -47,5 +47,6 @@ snakemake \
 #     snakemake \
 #         --profile profiles/pawsey_v8 \
 #         --delete-temp-output \
+#         --cleanup-shadow \
 #         --local-cores "${SLURM_CPUS_ON_NODE}"
 # fi

@@ -19,6 +19,8 @@ rule upload_uniprot_files:
         "results/uniprot_reference_proteomes",
     output:
         to_storage("uniprot_reference_proteomes"),
+    resources:
+        runtime=20,
     container:
         "docker://debian:stable-20250113"
     shell:
@@ -32,7 +34,7 @@ rule expand_uniprot_file:
         database_directory=temp(directory("results/uniprot_reference_proteomes")),
     threads: 2
     resources:
-        runtime=120,
+        runtime=60,
     shadow:
         "minimal"
     container:
