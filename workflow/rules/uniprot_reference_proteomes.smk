@@ -14,24 +14,24 @@ def get_uniprot_url(wildcards, input):
     return f"{uniprot_directory_url}/{files[0]}.tar.gz"
 
 
-rule upload_uniprot_files:
-    input:
-        "results/uniprot_reference_proteomes",
-    output:
-        to_storage("uniprot_reference_proteomes"),
-    resources:
-        runtime=40,
-    container:
-        "docker://debian:stable-20250113"
-    shell:
-        "cp -r {input} {output}"
+# rule upload_uniprot_files:
+#     input:
+#         "results/uniprot_reference_proteomes",
+#     output:
+#         to_storage("uniprot_reference_proteomes"),
+#     resources:
+#         runtime=40,
+#     container:
+#         "docker://debian:stable-20250113"
+#     shell:
+#         "cp -r {input} {output}"
 
 
 rule expand_uniprot_file:
     input:
         tarfile="results/uniprot_reference_proteome_files/reference_proteomes.tar.gz",
     output:
-        database_directory=temp(directory("results/uniprot_reference_proteomes")),
+        database_directory=to_storage(directory("uniprot_reference_proteomes")),
     threads: 2
     resources:
         runtime=60,
