@@ -19,12 +19,10 @@ rule upload_uniprot_files:
         "results/uniprot_reference_proteomes",
     output:
         to_storage("uniprot_reference_proteomes"),
-    resources:
-        runtime=90,
     container:
         "docker://debian:stable-20250113"
     shell:
-        "rm -r {output} && ln -s {input} {output}"
+        "ln -s {input} {output}"
 
 
 rule expand_uniprot_file:
