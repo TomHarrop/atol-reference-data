@@ -24,7 +24,7 @@ rule upload_uniprot_files:
     container:
         "docker://debian:stable-20250113"
     shell:
-        "cp -r {input} {output}"
+        "rm -r {output} && ln -s {input} {output}"
 
 
 rule expand_uniprot_file:
