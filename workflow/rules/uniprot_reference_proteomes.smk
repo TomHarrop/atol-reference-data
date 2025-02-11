@@ -20,13 +20,11 @@ rule upload_uniprot_files:
     output:
         to_storage("uniprot_reference_proteomes"),
     resources:
-        runtime='23h',
+        runtime="23h",
     container:
         "docker://debian:stable-20250113"
     shell:
-        "mv $(readlink -f {input}) {output} "
-        "&& "
-        "ln -s {output} {input}"
+        "cp -r {input} {output} "
 
 
 rule expand_uniprot_file:
