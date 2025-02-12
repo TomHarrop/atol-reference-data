@@ -32,7 +32,6 @@ raw_reads_for_assembly:
       # these will need to be split with fasterq-dump
       - ont:
           - https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos2/sra-pub-run-34/ERR012/12119/ERR12119216/ERR12119216.1
-
       - illumina:
           - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767297/ERR13767297
           - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767298/ERR13767298
@@ -43,5 +42,5 @@ raw_reads_for_assembly:
           - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767303/ERR13767303
           - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767304/ERR13767304
       - HiC:
-          - r1: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/047/ERR10890747/ERR10890747_1.fastq.gz
-          - r2: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/047/ERR10890747/ERR10890747_2.fastq.gz
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767294/ERR13767294
+          - 
