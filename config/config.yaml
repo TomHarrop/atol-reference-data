@@ -9,3 +9,39 @@ output_prefix: "s3://pawsey1132.atol.refdata.v0"
 taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
 uniprot_directory_url: ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes
 uniprot_filename_pattern: "Reference_Proteomes_\\d{4}_\\d{2}.tar.gz"
+
+raw_reads_for_assembly:
+  - assembly_id: "testassembly.tachina_grossa"
+    initiative: dtol
+    species_name: Tachina grossa
+    taxid: 141258
+    repo: ena
+    input_data:
+      - pacbio:
+          - ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/037/ERR10879937/ERR10879937.fastq.gz
+          - ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/038/ERR10879938/ERR10879938.fastq.gz
+      - HiC:
+          - r1: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/047/ERR10890747/ERR10890747_1.fastq.gz
+          - r2: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/047/ERR10890747/ERR10890747_2.fastq.gz
+  - assembly_id: "testassembly.valencia_hispanica"
+    initiative: erga
+    species_name: Valencia hispanica
+    taxid: 195855
+    repo: sra
+    input_data:
+      # these will need to be split with fasterq-dump
+      - ont:
+          - https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos2/sra-pub-run-34/ERR012/12119/ERR12119216/ERR12119216.1
+
+      - illumina:
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767297/ERR13767297
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767298/ERR13767298
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767299/ERR13767299
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767300/ERR13767300
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767301/ERR13767301
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767302/ERR13767302
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767303/ERR13767303
+          - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767304/ERR13767304
+      - HiC:
+          - r1: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/047/ERR10890747/ERR10890747_1.fastq.gz
+          - r2: ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR108/047/ERR10890747/ERR10890747_2.fastq.gz
