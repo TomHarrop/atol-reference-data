@@ -55,7 +55,9 @@ rule download_blast_db_file:
     log:
         "logs/download_blast_db_file/{filename}.log",
     resources:
-        runtime=10,
+        runtime=lambda wildcards, attempt: (
+            int(attempt * 30) if wildcards.filename == "nt.000" else int(attempt * 10)
+        ),
     shadow:
         "minimal"
     container:

@@ -34,7 +34,7 @@ fi
 # run the pipeline with notemp to avoid re-downloading the data
 snakemake \
     --profile profiles/pawsey_v8 \
-    --retries 0 \
+    --retries 1 \
     --keep-going \
     --notemp \
     --cores 12 \
