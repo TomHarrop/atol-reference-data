@@ -14,9 +14,6 @@ configfile: "config/config.yaml"
 globals().update(config)
 
 
-print(config)
-quit(1)
-
 def get_storage_prefix(output_prefix):
     output_prefix_url = urlparse(output_prefix)
     netloc = output_prefix_url.netloc.lstrip("/")
