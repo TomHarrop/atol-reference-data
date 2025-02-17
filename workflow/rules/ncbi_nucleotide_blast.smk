@@ -30,6 +30,8 @@ rule expand_blast_db_files:
     output:
         database_directory=temp(directory("results/ncbi_nucleotide_blast")),
     threads: 12
+    resources:
+        runtime=60,
     shadow:
         "minimal"
     container:
@@ -52,10 +54,12 @@ rule download_blast_db_file:
         md5_url=lambda wildcards: f"{config['blast_db_directory_url']}/{wildcards.filename}.tar.gz.md5",
     log:
         "logs/download_blast_db_file/{filename}.log",
-    container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
+    resources:
+        runtime=10,
     shadow:
         "minimal"
+    container:
+        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
     shell:
         "wget {params.file_url} -O {wildcards.filename}.tar.gz &> {log} && "
         "wget {params.md5_url} -O {wildcards.filename}.tar.gz.md5 &>> {log} && "
