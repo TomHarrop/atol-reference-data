@@ -32,14 +32,14 @@ fi
 # curl -Iv ftp.ncbi.nih.gov
 
 # run the pipeline with notemp to avoid re-downloading the data
-# snakemake \
-#     --profile profiles/pawsey_v8 \
-#     --retries 1 \
-#     --keep-going \
-#     --notemp \
-#     --cores 12 \
-#     --local-cores "${SLURM_CPUS_ON_NODE}" \
-#     busco_databases_target
+snakemake \
+    --profile profiles/pawsey_v8 \
+    --retries 1 \
+    --keep-going \
+    --notemp \
+    --cores 12 \
+    --local-cores "${SLURM_CPUS_ON_NODE}" \
+    busco_databases_target
 
 # delete if everything is there, disabled for now
 if [ $? -eq 0 ]; then
@@ -48,5 +48,6 @@ if [ $? -eq 0 ]; then
         --profile profiles/pawsey_v8 \
         --delete-temp-output \
         --cleanup-shadow \
-        --local-cores "${SLURM_CPUS_ON_NODE}"
+        --local-cores "${SLURM_CPUS_ON_NODE}" \
+        busco_databases_target
 fi
