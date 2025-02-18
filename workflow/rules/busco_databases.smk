@@ -22,7 +22,7 @@ def check_concurrent_busco_downloads(wildcards):
 
 def get_busco_databases_target(wildcards):
     manifest = read_manifest(wildcards)
-    return list(to_storage(f"busco_databases/{x}") for x in manifest.keys())[0:10]
+    return list(to_storage(f"busco_databases/{x}") for x in manifest.keys())
 
 
 def get_busco_manifest_url(wildcards):
