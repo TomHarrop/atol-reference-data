@@ -14,6 +14,8 @@ rule upload_blast_db_files:
         "results/ncbi_nucleotide_blast",
     output:
         to_storage("ncbi_nucleotide_blast"),
+    resources:
+        runtime="12h",
     container:
         "docker://debian:stable-20250113"
     shell:
