@@ -39,7 +39,9 @@ snakemake \
     --notemp \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    busco_databases_target
+    -n
+
+exit 1
 
 # delete if everything is there, disabled for now
 # if [ $? -eq 0 ]; then
