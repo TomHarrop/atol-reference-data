@@ -92,6 +92,7 @@ rule download_busco_lineage_files:
         "logs/download_busco_lineage_files/{lineage}.log",
     resources:
         concurrent_busco_downloads=check_concurrent_busco_downloads,
+        runtime=lambda wildcards, attempt: int(attempt * 10),
     retries: 3
     shadow:
         "minimal"

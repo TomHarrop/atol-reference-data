@@ -39,7 +39,7 @@ snakemake \
     --notemp \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    upload_blast_db_files
+    busco_databases_target
 
 # delete if everything is there, disabled for now
 # if [ $? -eq 0 ]; then
