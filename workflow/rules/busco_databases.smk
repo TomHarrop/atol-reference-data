@@ -75,7 +75,6 @@ rule upload_busco_databases:
         to_storage("busco_databases/{lineage}"),
     priority: 50
     resources:
-        concurrent_busco_downloads=check_concurrent_busco_downloads,
         runtime=20,
     container:
         "docker://debian:stable-20250113"
@@ -90,6 +89,8 @@ rule expand_busco_lineage_files:
         temp(directory("results/busco_databases/{lineage}")),
     log:
         "logs/expand_busco_lineage_files/{lineage}.log",
+    resources:
+        concurrent_busco_downloads=check_concurrent_busco_downloads,
     shadow:
         "minimal"
     container:
