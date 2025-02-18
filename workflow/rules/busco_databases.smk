@@ -22,7 +22,7 @@ def check_concurrent_busco_downloads(wildcards):
 
 def get_busco_databases_target(wildcards):
     manifest = read_manifest(wildcards)
-    return list(to_storage(f"busco_databases/{x}") for x in manifest.keys())
+    return list(to_storage(f"busco_databases/{x}") for x in manifest.keys())[0:10]
 
 
 def get_busco_manifest_url(wildcards):
@@ -73,6 +73,7 @@ rule upload_busco_databases:
         "results/busco_databases/{lineage}",
     output:
         to_storage("busco_databases/{lineage}"),
+    priority: 50
     resources:
         concurrent_busco_downloads=check_concurrent_busco_downloads,
         runtime=20,
