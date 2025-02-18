@@ -36,7 +36,6 @@ snakemake \
     --profile profiles/pawsey_v8 \
     --retries 1 \
     --keep-going \
-    --notemp \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
     busco_databases_target
