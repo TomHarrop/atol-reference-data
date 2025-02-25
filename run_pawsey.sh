@@ -40,14 +40,6 @@ snakemake \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
     download_busco_manifest
 
-snakemake \
-    --profile profiles/pawsey_v8 \
-    --retries 1 \
-    --keep-going \
-    --cores 12 \
-    --local-cores "${SLURM_CPUS_ON_NODE}" \
-    --touch busco_databases_target
-
 batches=100
 for i in $(seq 1 $batches); do
     snakemake \
