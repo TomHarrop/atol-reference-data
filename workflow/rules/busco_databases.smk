@@ -76,6 +76,7 @@ rule upload_busco_databases:
     priority: 50
     resources:
         runtime=20,
+        concurrent_busco_downloads=check_concurrent_busco_downloads,
     container:
         "docker://debian:stable-20250113"
     shell:
