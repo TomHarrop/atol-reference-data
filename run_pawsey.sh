@@ -41,12 +41,12 @@ snakemake \
     download_busco_manifest
 
 snakemake \
-        --profile profiles/pawsey_v8 \
-        --retries 1 \
-        --keep-going \
-        --cores 12 \
-        --local-cores "${SLURM_CPUS_ON_NODE}" \
-        -n busco_databases_target
+    --profile profiles/pawsey_v8 \
+    --retries 1 \
+    --keep-going \
+    --cores 12 \
+    --local-cores "${SLURM_CPUS_ON_NODE}" \
+    s3://pawsey1132.atol.refdata.v0/busco_databases/chromatiaceae_odb12
 
 exit 0
 
