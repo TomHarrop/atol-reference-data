@@ -33,20 +33,12 @@ fi
 
 # run the pipeline with notemp to avoid re-downloading the data
 snakemake \
-    --profile profiles/pawsey_v8 \
+    --profile profiles/busco \
     --retries 1 \
     --keep-going \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    download_busco_manifest
-
-snakemake \
-    --profile profiles/pawsey_v8 \
-    --retries 1 \
-    --keep-going \
-    --cores 12 \
-    --local-cores "${SLURM_CPUS_ON_NODE}" \
-    s3://pawsey1132.atol.refdata.v0/busco_databases/chromatiaceae_odb12
+    busco_databases_target
 
 exit 0
 
