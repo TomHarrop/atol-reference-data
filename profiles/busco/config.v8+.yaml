@@ -16,14 +16,14 @@ default-resources:
   - mem_mb=4000
   - runtime=5
 resources:
-  - concurrent_busco_downloads=1
+  - concurrent_busco_downloads=3
 restart-times: 0
 max-jobs-per-second: 50
 max-status-checks-per-second: 10
 local-cores: 2
 cores: 50
 latency-wait: 60
-jobs: 1
+jobs: 9
 keep-going: true
 keep-storage-local-copies: true
 rerun-incomplete: true

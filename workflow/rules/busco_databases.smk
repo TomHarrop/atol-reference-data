@@ -22,7 +22,7 @@ def check_concurrent_busco_downloads(wildcards):
 
 def get_busco_databases_target(wildcards):
     manifest = read_manifest(wildcards)
-    return list(to_storage(f"busco_databases/{x}") for x in manifest.keys())
+    return list(to_storage(f"busco/lineages/{x}") for x in manifest.keys())
 
 
 def get_busco_manifest_url(wildcards):
@@ -55,7 +55,7 @@ def read_manifest(wildcards):
     with open(manifest) as f:
         for line in f:
             line_split = line.strip().split("\t")
-            if line_split[4] == "lineages":
+            if line_split[4] == "lineages" and line_split[3] in busco_domains:
                 lineage_to_hash[line_split[0]] = {
                     "date": line_split[1],
                     "hash": line_split[2],
@@ -72,7 +72,7 @@ rule upload_busco_databases:
     input:
         "results/busco_databases/{lineage}",
     output:
-        to_storage("busco_databases/{lineage}"),
+        to_storage("busco/lineages/{lineage}"),
     priority: 50
     resources:
         runtime=20,

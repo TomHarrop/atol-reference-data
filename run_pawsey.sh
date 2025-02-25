@@ -35,7 +35,6 @@ fi
 snakemake \
     --profile profiles/busco \
     --retries 1 \
-    --keep-going \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
     busco_databases_target

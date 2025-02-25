@@ -7,6 +7,8 @@ later versions cause `MissingContentLength` errors
 
 ## To Do:
 
+The BUSCO datasets use up >1M files, so they will have to go into separate S3 buckets. OMG.
+
 Probably best to write a workflow for downloading this reference data.
 
 e.g.:

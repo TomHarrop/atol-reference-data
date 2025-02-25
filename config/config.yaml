@@ -1,6 +1,9 @@
 blast_db_directory_url: ftp://ftp.ncbi.nlm.nih.gov/blast/db/v5
 busco_directory_url: https://busco-data.ezlab.org/v5/data
 busco_manifest_path: file_versions.tsv
+busco_domains:
+  # options: Prokaryota, Eukaryota, Virus
+  - Eukaryota
 nt_filename_pattern: "nt.[0-9]{3}.tar.gz"
 # Use snakemake prefixes, e.g. s3://endpoint.name for s3, or fs://path for
 # local folders. The endpoint is currently configured in the profile.
@@ -9,7 +12,7 @@ output_prefix: "s3://pawsey1132.atol.refdata.v0"
 taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
 uniprot_directory_url: ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes
 uniprot_filename_pattern: "Reference_Proteomes_\\d{4}_\\d{2}.tar.gz"
-
+# test datasets for reference assemblies
 raw_reads_for_assembly:
   - assembly_id: "testassembly.tachina_grossa"
     initiative: dtol
@@ -43,4 +46,4 @@ raw_reads_for_assembly:
           - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767304/ERR13767304
       - HiC:
           - https://sra-pub-run-odp.s3.amazonaws.com/sra/ERR13767294/ERR13767294
-          - 
+          -
