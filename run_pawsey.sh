@@ -41,7 +41,8 @@ for i in $(seq 1 $batches); do
         --keep-going \
         --cores 12 \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        --batch busco_databases_target=$i/$batches
+        --batch busco_databases_target=$i/$batches \
+        busco_databases_target
 done
 
 # delete if everything is there, disabled for now
