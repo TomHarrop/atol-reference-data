@@ -35,7 +35,7 @@ fi
 
 batches=100
 for i in $(seq 1 $batches); do
-    echo snakemake \
+    snakemake \
         --profile profiles/pawsey_v8 \
         --retries 1 \
         --keep-going \
