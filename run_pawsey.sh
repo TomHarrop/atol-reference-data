@@ -40,17 +40,16 @@ snakemake \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
     download_busco_manifest
 
-batches=100
-for i in $(seq 1 $batches); do
-    snakemake \
+snakemake \
         --profile profiles/pawsey_v8 \
         --retries 1 \
         --keep-going \
         --cores 12 \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
         --batch busco_databases_target=$i/$batches \
-        busco_databases_target
-done
+        -n busco_databases_target
+
+exit 0
 
 # delete if everything is there, disabled for now
 if [ $? -eq 0 ]; then
