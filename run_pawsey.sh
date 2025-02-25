@@ -47,7 +47,6 @@ snakemake \
     --keep-going \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    --batch busco_databases_target=$i/$batches \
     --touch busco_databases_target
 
 batches=100
