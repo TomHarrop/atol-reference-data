@@ -9,7 +9,8 @@ include: "rules/busco_databases.smk"
 include: "rules/ncbi_nucleotide_blast.smk"
 include: "rules/ncbi_taxdump.smk"
 include: "rules/uniprot_reference_proteomes.smk"
-
+include: "rules/nt_kraken.smk"
+include: "rules/diamond_database.smk"
 
 rule all:
     default_target: True
