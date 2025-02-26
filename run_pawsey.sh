@@ -37,7 +37,7 @@ snakemake \
     --retries 1 \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    busco_databases_target
+    busco_databases_target diamond_makedb
 
 exit 0
 
