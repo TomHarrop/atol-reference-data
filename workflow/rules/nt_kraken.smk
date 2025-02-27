@@ -13,7 +13,7 @@ rule kraken2_db:
     params:
         db=subpath(input.library, parent=True),
     resources:
-        mem="256GiB",
+        mem="128GB",
         storage_uploads=check_concurrent_storage_uploads,
     threads: 24
     shadow:
@@ -36,9 +36,7 @@ rule kraken2_download_library:
         library=directory("results/kraken2_db/library"),
     params:
         db=subpath(output.library, parent=True),
-    resources:
-        mem="256GiB",
-    threads: 24
+    threads: 12
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
@@ -53,9 +51,7 @@ rule kraken2_download_taxonomy:
         taxonomy=directory("results/kraken2_db/taxonomy"),
     params:
         db=subpath(output.taxonomy, parent=True),
-    resources:
-        mem="256GiB",
-    threads: 24
+    threads: 12
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
