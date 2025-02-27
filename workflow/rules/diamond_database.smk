@@ -15,6 +15,7 @@ rule diamond_makedb:
     threads: 24
     resources:
         storage_uploads=check_concurrent_storage_uploads,
+        runtime=lambda wildcards, attempt: int(attempt * 60),
     shadow:
         "minimal"
     container:
@@ -36,6 +37,8 @@ rule diamond_get_taxid_map:
         taxid_map="results/diamond/reference_proteomes.taxid_map",
     log:
         "logs/diamond_get_taxid_map.log",
+    resources:
+        runtime=lambda wildcards, attempt: int(attempt * 20),
     shadow:
         "minimal"
     container:
@@ -65,6 +68,8 @@ rule diamond_get_sequences:
         sequences="results/diamond/reference_proteomes.fasta.gz",
     log:
         "logs/diamond_get_sequences.log",
+    resources:
+        runtime=lambda wildcards, attempt: int(attempt * 20),
     shadow:
         "minimal"
     container:

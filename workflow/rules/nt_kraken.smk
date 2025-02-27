@@ -1,9 +1,3 @@
-configfile: "config/config.yaml"
-
-
-include: "common.smk"
-
-
 rule kraken2_db:
     input:
         taxonomy="results/kraken2_db/taxonomy",
@@ -15,6 +9,7 @@ rule kraken2_db:
     resources:
         mem="128GB",
         storage_uploads=check_concurrent_storage_uploads,
+        runtime=lambda wildcards, attempt: int(attempt * 120),
     threads: 24
     shadow:
         "minimal"
@@ -37,6 +32,8 @@ rule kraken2_download_library:
     params:
         db=subpath(output.library, parent=True),
     threads: 12
+    resources:
+        runtime=lambda wildcards, attempt: int(attempt * 60),
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
@@ -52,6 +49,8 @@ rule kraken2_download_taxonomy:
     params:
         db=subpath(output.taxonomy, parent=True),
     threads: 12
+    resources:
+        runtime=lambda wildcards, attempt: int(attempt * 60),
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
