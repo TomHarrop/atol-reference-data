@@ -43,9 +43,9 @@ rule diamond_get_taxid_map:
     shell:
         'echo -e "accession\\taccession.version\\ttaxid\\tgi" > {output.taxid_map} '
         "&& "
-        "( find {input.database_directory}/ "
+        "find {input.database_directory}/ "
         "-name '*.idmapping.gz' "
-        "2>> {log} || true ) "
+        "2>> {log} "
         "| "
         "xargs zcat "
         "2>> {log} "
@@ -72,16 +72,16 @@ rule diamond_get_sequences:
     shell:
         "touch {output.sequences} "
         "&& "
-        "( find {input.database_directory}/ "
+        "find {input.database_directory}/ "
         "-mindepth 2  "
         "-name '*.fasta.gz*' "
-        "2>> {log} || true ) "
+        "2>> {log} "
         "| "
-        '( grep -v "DNA" '
-        "2>> {log} || true ) "
+        'grep -v "DNA" '
+        "2>> {log} "
         "| "
-        '( grep -v "additional" '
-        "2>> {log} || true ) "
+        'grep -v "additional" '
+        "2>> {log} "
         "|  xargs cat "
         ">> {output.sequences} "
         "2>> {log} "
