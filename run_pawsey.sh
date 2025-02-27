@@ -37,9 +37,7 @@ snakemake \
     --retries 1 \
     --cores 12 \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    busco_databases_target diamond_makedb
-
-exit 0
+    busco_databases_target diamond_makedb kraken2_db
 
 # delete if everything is there, disabled for now
 if [ $? -eq 0 ]; then
@@ -49,5 +47,5 @@ if [ $? -eq 0 ]; then
         --delete-temp-output \
         --cleanup-shadow \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        busco_databases_target
+        busco_databases_target diamond_makedb kraken2_db
 fi

@@ -76,7 +76,7 @@ rule upload_busco_databases:
     priority: 50
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 20),
-        concurrent_busco_downloads=check_concurrent_busco_downloads,
+        storage_uploads=check_concurrent_storage_uploads,
     container:
         "docker://debian:stable-20250113"
     shell:

@@ -23,6 +23,8 @@ rule ncbi_taxdump:
         timestamp=to_storage("taxdump/TIMESTAMP"),
     params:
         outdir=lambda wildcards, output: Path(output[0]).parent,
+    resources:
+        storage_uploads=check_concurrent_storage_uploads,
     container:
         "docker://debian:stable-20250113"
     shell:

@@ -21,6 +21,7 @@ rule upload_uniprot_files:
         to_storage("uniprot_reference_proteomes"),
     resources:
         runtime="23h",
+        storage_uploads=check_concurrent_storage_uploads,
     container:
         "docker://debian:stable-20250113"
     shell:

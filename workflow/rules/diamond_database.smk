@@ -2,17 +2,19 @@
 
 # TODO delete the head commands which make this run on a subset
 
+
 rule diamond_makedb:
     input:
         taxid_map="results/diamond/reference_proteomes.taxid_map",
         sequences="results/diamond/reference_proteomes.fasta.gz",
-        nodes=to_storage("taxdump/nodes.dmp")
+        nodes=to_storage("taxdump/nodes.dmp"),
     output:
         dmnd=to_storage("diamond/reference_proteomes.dmnd"),
     log:
         "logs/diamond_get_taxid_map.log",
-    threads:
-        24
+    threads: 24
+    resources:
+        storage_uploads=check_concurrent_storage_uploads,
     shadow:
         "minimal"
     container:
