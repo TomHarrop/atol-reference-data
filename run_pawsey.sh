@@ -36,6 +36,7 @@ snakemake \
     --profile profiles/busco \
     --retries 1 \
     --cores 12 \
+    --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
     busco_databases_target diamond_makedb kraken2_db
 
