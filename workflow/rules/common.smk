@@ -49,7 +49,6 @@ def to_storage(path_string, storage_prefix=None, registered_storage=storage.outp
         raise NotImplementedError(f"Unknown storage scheme {scheme}")
 
 
-
 def get_files_from_listing_file(listing_file, filename_pattern):
     files = []
     with open(listing_file) as f:
@@ -68,7 +67,7 @@ def get_files_from_listing_file(listing_file, filename_pattern):
 # register storage for the workflow
 try:
     storage output:
-        provider=urlparse(output_prefix).scheme
+        provider = urlparse(output_prefix).scheme
 except NameError as e:
     logger.error(
         """
