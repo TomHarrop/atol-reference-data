@@ -6,6 +6,7 @@ __definitions__:
   - tmpdir = mkdtemp()
 resources:
   - concurrent_busco_downloads=1
+  - concurrent_storage_uploads=1
 restart-times: 0
 local-cores: 2
 cores: 50

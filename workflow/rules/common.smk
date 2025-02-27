@@ -14,6 +14,23 @@ configfile: "config/config.yaml"
 globals().update(config)
 
 
+def check_concurrent_storage_uploads(wildcards):
+    """
+    This workflow generates a huge number of temporary files particularly while
+    waiting to upload them to the storage location. This dummy resource is used
+    to limit the number of concurrent upload jobs.
+
+    resources:
+     - concurrent_storage_uploads=1
+
+    """
+
+    if "concurrent_storage_uploads" in workflow.resource_settings.resources:
+        return 1
+    else:
+        return Nono
+
+
 def get_storage_prefix(output_prefix):
     output_prefix_url = urlparse(output_prefix)
     netloc = output_prefix_url.netloc.lstrip("/")

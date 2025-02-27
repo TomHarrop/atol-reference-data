@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+# TODO delete the head commands which make this run on a subset
+
 rule diamond_makedb:
     input:
         taxid_map="results/diamond/reference_proteomes.taxid_map",
