@@ -33,7 +33,7 @@ rule kraken2_download_library:
         db=subpath(output.library, parent=True),
     threads: 12
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 60),
+        runtime=lambda wildcards, attempt: int(attempt * 240),
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
