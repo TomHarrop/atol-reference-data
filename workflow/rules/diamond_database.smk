@@ -69,7 +69,7 @@ rule diamond_get_sequences:
     log:
         "logs/diamond_get_sequences.log",
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 120),
+        runtime=lambda wildcards, attempt: int(attempt * 60),
     shadow:
         "minimal"
     container:
