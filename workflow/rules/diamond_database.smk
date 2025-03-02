@@ -38,7 +38,7 @@ rule diamond_get_taxid_map:
     log:
         "logs/diamond_get_taxid_map.log",
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 20),
+        runtime=lambda wildcards, attempt: int(attempt * 120),
     shadow:
         "minimal"
     container:
@@ -69,7 +69,7 @@ rule diamond_get_sequences:
     log:
         "logs/diamond_get_sequences.log",
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 20),
+        runtime=lambda wildcards, attempt: int(attempt * 120),
     shadow:
         "minimal"
     container:
