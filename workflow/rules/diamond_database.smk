@@ -11,7 +11,7 @@ rule diamond_makedb:
     output:
         dmnd=to_storage("diamond/reference_proteomes.dmnd"),
     log:
-        "logs/diamond_get_taxid_map.log",
+        "logs/diamond_makedb.log",
     threads: 24
     resources:
         storage_uploads=check_concurrent_storage_uploads,

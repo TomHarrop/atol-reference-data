@@ -28,7 +28,7 @@ def check_concurrent_storage_uploads(wildcards):
     if "concurrent_storage_uploads" in workflow.resource_settings.resources:
         return 1
     else:
-        return Nono
+        return None
 
 
 def get_storage_prefix(output_prefix):
