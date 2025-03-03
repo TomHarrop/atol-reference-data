@@ -25,7 +25,8 @@ rule kraken2_db:
         "&& "
         "ls -lhrt {params.db} "
 
-
+# Taking ages, can we do it with add-to-library?
+# https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown#add-to-library
 rule kraken2_download_library:
     output:
         library=directory("results/kraken2_db/library"),
@@ -33,7 +34,7 @@ rule kraken2_download_library:
         db=subpath(output.library, parent=True),
     threads: 12
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 240),
+        runtime=lambda wildcards, attempt: int(attempt * 960),
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
