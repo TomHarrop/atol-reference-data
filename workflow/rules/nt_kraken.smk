@@ -27,6 +27,7 @@ rule kraken2_db:
 
 # Taking ages, can we do it with add-to-library?
 # https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown#add-to-library
+# First, try switching to k2: https://github.com/DerrickWood/kraken2/wiki/Manual#build
 rule kraken2_download_library:
     output:
         library=directory("results/kraken2_db/library"),
@@ -49,13 +50,11 @@ rule kraken2_download_taxonomy:
         taxonomy=directory("results/kraken2_db/taxonomy"),
     params:
         db=subpath(output.taxonomy, parent=True),
-    threads: 12
+    threads: 2
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
-        "kraken2-build "
-        "--threads {threads} "
-        "--download-taxonomy "
+        "k2 download-taxonomy "
         "--db {params.db}"
