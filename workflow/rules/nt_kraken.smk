@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 rule kraken2_db:
     input:
         taxonomy="results/kraken2_db/taxonomy",
@@ -18,12 +21,12 @@ rule kraken2_db:
     shell:
         "ls -lhrt {params.db} "
         "&&"
-        "kraken2-build "
-        "--build "
+        "k2 build "
         "--threads {threads} "
         "--db {params.db} "
         "&& "
         "ls -lhrt {params.db} "
+
 
 # Taking ages, can we do it with add-to-library?
 # https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown#add-to-library
@@ -39,9 +42,9 @@ rule kraken2_download_library:
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
-        "kraken2-build "
+        "k2 download-library "
         "--threads {threads} "
-        "--download-library nt "
+        "--library nt "
         "--db {params.db}"
 
 
