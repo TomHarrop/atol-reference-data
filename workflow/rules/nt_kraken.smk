@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 
-rule kraken2_db:
+rule kraken2_build_db:
     input:
         taxonomy="results/kraken2_db/taxonomy",
         library="results/kraken2_db/library",
     output:
         to_storage("kraken2_db"),
+    log:
+        "logs/kraken2_build_db.log",
     params:
         db=subpath(input.library, parent=True),
     resources:
@@ -26,7 +28,7 @@ rule kraken2_db:
         "--db {params.db} "
         "&& "
         "ls -lhrt {params.db} "
-
+        "&> {log}"
 
 # Taking ages, can we do it with add-to-library?
 # https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown#add-to-library
@@ -36,6 +38,8 @@ rule kraken2_download_library:
         library=directory("results/kraken2_db/library"),
     params:
         db=subpath(output.library, parent=True),
+    log:
+        "logs/kraken2_download_library.log",
     threads: 4
     resources:
         runtime=lambda wildcards, attempt: f"{int(attempt*10)}H",
@@ -45,14 +49,16 @@ rule kraken2_download_library:
         "k2 download-library "
         "--threads {threads} "
         "--library nt "
-        "--db {params.db}"
-
+        "--db {params.db} "
+        "&> {log}"
 
 rule kraken2_download_taxonomy:
     output:
         taxonomy=directory("results/kraken2_db/taxonomy"),
     params:
         db=subpath(output.taxonomy, parent=True),
+    log:
+        "logs/kraken2_download_taxonomy.log",
     threads: 2
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
@@ -60,4 +66,5 @@ rule kraken2_download_taxonomy:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
         "k2 download-taxonomy "
-        "--db {params.db}"
+        "--db {params.db} "
+        "&> {log}"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 rule diamond_makedb:
     input:
         taxid_map="results/diamond/reference_proteomes.taxid_map",
@@ -13,6 +14,7 @@ rule diamond_makedb:
     resources:
         storage_uploads=check_concurrent_storage_uploads,
         runtime=lambda wildcards, attempt: int(attempt * 60),
+        mem=lambda wildcards, attempt: f"{int(128)* attempt}GB",
     shadow:
         "minimal"
     container:
