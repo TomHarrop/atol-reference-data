@@ -36,7 +36,7 @@ rule kraken2_download_library:
         library=directory("results/kraken2_db/library"),
     params:
         db=subpath(output.library, parent=True),
-    threads: 12
+    threads: 4
     resources:
         runtime=lambda wildcards, attempt: f"{int(attempt*10)}H",
     container:
