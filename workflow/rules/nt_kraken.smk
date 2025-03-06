@@ -43,6 +43,8 @@ rule kraken2_download_library:
     threads: 4
     resources:
         runtime=lambda wildcards, attempt: f"{int(attempt*10)}H",
+    shadow:
+        "minimal"
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
