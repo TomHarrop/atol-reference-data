@@ -30,6 +30,7 @@ rule kraken2_build_db:
         "ls -lhrt {params.db} "
         "&> {log}"
 
+
 # Taking ages, can we do it with add-to-library?
 # https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown#add-to-library
 # First, try switching to k2: https://github.com/DerrickWood/kraken2/wiki/Manual#build
@@ -42,7 +43,8 @@ rule kraken2_download_library:
         "logs/kraken2_download_library.log",
     threads: 4
     resources:
-        runtime=lambda wildcards, attempt: f"{int(attempt*24)}H",
+        runtime=lambda wildcards, attempt: f"{int(attempt*48)}H",
+        partitionFlag="--partition long",
     shadow:
         "minimal"
     container:
@@ -53,6 +55,7 @@ rule kraken2_download_library:
         "--library nt "
         "--db {params.db} "
         "&> {log}"
+
 
 rule kraken2_download_taxonomy:
     output:
