@@ -12,22 +12,19 @@ rule kraken2_build_db:
     params:
         db=subpath(input.library, parent=True),
     resources:
-        mem="128GB",
+        mem="256GB",
         storage_uploads=check_concurrent_storage_uploads,
-        runtime=lambda wildcards, attempt: int(attempt * 120),
+        runtime=lambda wildcards, attempt: int(attempt * 180),
+        partitionFlag="--partition highmem",
     threads: 24
     shadow:
         "minimal"
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
-        "ls -lhrt {params.db} "
-        "&&"
         "k2 build "
         "--threads {threads} "
         "--db {params.db} "
-        "&& "
-        "ls -lhrt {params.db} "
         "&> {log}"
 
 
