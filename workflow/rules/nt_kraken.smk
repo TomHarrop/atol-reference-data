@@ -12,7 +12,7 @@ rule kraken2_build_db:
     params:
         db=subpath(input.library, parent=True),
     resources:
-        mem="1TB",
+        mem="980GB",
         storage_uploads=check_concurrent_storage_uploads,
         runtime=lambda wildcards, attempt: f"{int(attempt*12)}H",
         partitionFlag="--partition highmem",
