@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+from humanfriendly import parse_size
+
+
+def get_mem(wildcards, resources):
+    return int(0.9 * parse_size(resources.mem))
+
 
 rule kraken2_build_db:
     input:
@@ -10,9 +16,10 @@ rule kraken2_build_db:
     log:
         "logs/kraken2_build_db.log",
     params:
+        mem_bytes=get_mem,
         db=subpath(input.library, parent=True),
     resources:
-        mem="980GB",
+        mem="480GB",
         storage_uploads=check_concurrent_storage_uploads,
         runtime=lambda wildcards, attempt: f"{int(attempt*12)}H",
         partitionFlag="--partition highmem",
@@ -24,6 +31,7 @@ rule kraken2_build_db:
     shell:
         "k2 build "
         "--threads {threads} "
+        "--max-db-size {params.mem_bytes} "
         "--db {params.db} "
         "&> {log}"
 
