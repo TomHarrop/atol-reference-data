@@ -4,7 +4,7 @@ from humanfriendly import parse_size
 
 
 def get_mem(wildcards, resources):
-    return int(0.9 * parse_size(resources.mem))
+    return int(0.95 * parse_size(resources.mem))
 
 
 rule kraken2_build_db:
@@ -19,9 +19,9 @@ rule kraken2_build_db:
         mem_bytes=get_mem,
         db=subpath(input.library, parent=True),
     resources:
-        mem="480GB",
+        mem="256GB",
         storage_uploads=check_concurrent_storage_uploads,
-        runtime=lambda wildcards, attempt: f"{int(attempt*12)}H",
+        runtime=lambda wildcards, attempt: f"{int(attempt*24)}H",
         partitionFlag="--partition highmem",
     threads: 24
     shadow:
