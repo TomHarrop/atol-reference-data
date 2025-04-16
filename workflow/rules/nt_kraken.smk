@@ -12,7 +12,7 @@ rule kraken2_build_db:
         taxonomy="results/kraken2_db/taxonomy",
         library="results/kraken2_db/library",
     output:
-        flagfile = "results/kraken2_db/flagfile,
+        flagfile="results/kraken2_db/flagfile",
     log:
         "logs/kraken2_build_db.log",
     params:
