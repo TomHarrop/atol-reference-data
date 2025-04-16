@@ -35,7 +35,7 @@ fi
 # run the pipeline with notemp to avoid re-downloading the data
 snakemake \
     --profile profiles/busco \
-    --retries 1 \
+    --retries 0 \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \

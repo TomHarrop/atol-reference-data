@@ -12,7 +12,7 @@ rule kraken2_build_db:
         taxonomy="results/kraken2_db/taxonomy",
         library="results/kraken2_db/library",
     output:
-        to_storage("kraken2_db"),
+        flagfile = "results/kraken2_db/flagfile,
     log:
         "logs/kraken2_build_db.log",
     params:
@@ -29,11 +29,14 @@ rule kraken2_build_db:
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
+        "ls -lhrt {params.db}/ && "
         "k2 build "
         "--threads {threads} "
         "--max-db-size {params.mem_bytes} "
         "--db {params.db} "
         "&> {log}"
+        "&& touch {output.flagfile} "
+        "&& ls -lhrt {params.db}/"
 
 
 # Taking ages, can we do it with add-to-library?
