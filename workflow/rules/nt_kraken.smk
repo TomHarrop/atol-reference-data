@@ -23,7 +23,7 @@ rule kraken2_build_db:
         "logs/kraken2_build_db.log",
     params:
         mem_bytes=get_mem,
-        db=subpath(input.library, parent=True),
+        db=subpath(output[0], parent=True),
     resources:
         mem="256GB",
         storage_uploads=check_concurrent_storage_uploads,
@@ -35,11 +35,13 @@ rule kraken2_build_db:
     container:
         "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
     shell:
+        "ln -s $(readlink -f {input.taxonomy}) {params.db}/ && "
+        "ln -s $(readlink -f {input.library}) {params.db}/ && "
         "k2 build "
         "--threads {threads} "
         "--max-db-size {params.mem_bytes} "
         "--db {params.db} "
-        "&> {log}"
+        "&> {log} "
 
 
 # Taking ages, can we do it with add-to-library?
