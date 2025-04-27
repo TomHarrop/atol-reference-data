@@ -16,8 +16,9 @@ include: "rules/uniprot_reference_proteomes.smk"
 rule all:
     default_target: True
     input:
-        to_storage("busco_databases"),
+        rules.busco_databases_target.input,
         to_storage("diamond/reference_proteomes.dmnd"),
         to_storage("ncbi_nucleotide_blast"),
+        to_storage("results/kraken2_db/hash.k2d"),
         to_storage("taxdump/TIMESTAMP"),
         to_storage("uniprot_reference_proteomes"),
