@@ -74,6 +74,8 @@ rule upload_busco_databases:
     output:
         to_storage("busco/lineages/{lineage}"),
     priority: 50
+    group:
+        "busco"
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
         storage_uploads=check_concurrent_storage_uploads,
@@ -90,6 +92,8 @@ rule expand_busco_lineage_files:
         temp(directory("results/busco_databases/{lineage}")),
     log:
         "logs/expand_busco_lineage_files/{lineage}.log",
+    group:
+        "busco"
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 10),
         concurrent_busco_downloads=check_concurrent_busco_downloads,
