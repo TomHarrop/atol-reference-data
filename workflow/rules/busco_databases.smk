@@ -75,7 +75,7 @@ rule upload_busco_databases:
         to_storage("busco/lineages/{lineage}"),
     priority: 50
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 20),
+        runtime=lambda wildcards, attempt: int(attempt * 60),
         storage_uploads=check_concurrent_storage_uploads,
     container:
         "docker://debian:stable-20250113"
