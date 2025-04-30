@@ -39,7 +39,9 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    busco_databases_target kraken2_build_db
+    kraken2_build_db
+
+# busco_databases_target
 
 # delete if everything is there, disabled for now
 if [ $? -eq 0 ]; then
@@ -49,5 +51,7 @@ if [ $? -eq 0 ]; then
         --delete-temp-output \
         --cleanup-shadow \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        busco_databases_target kraken2_build_db
+        kraken2_build_db
 fi
+
+# busco_databases_target
