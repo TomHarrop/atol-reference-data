@@ -1,7 +1,7 @@
 boto3==1.35.95
-snakemake-executor-plugin-cluster-generic>=1.0.9
+snakemake-executor-plugin-cluster-generic==1.0.9
 snakemake-storage-plugin-fs==1.0.6
-snakemake-storage-plugin-ftp>=0.1.2
-snakemake-storage-plugin-http>=0.2.3
-snakemake-storage-plugin-s3>=0.2.12
-snakemake>=8.27.1
+snakemake-storage-plugin-ftp==0.1.2
+snakemake-storage-plugin-http==0.2.3
+snakemake-storage-plugin-s3==0.2.12
+snakemake==8.27.1
