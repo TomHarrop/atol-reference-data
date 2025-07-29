@@ -68,6 +68,7 @@ rule download_blast_db_file:
     shell:
         "wget {params.file_url} -O {wildcards.filename}.tar.gz &> {log} && "
         "wget {params.md5_url} -O {wildcards.filename}.tar.gz.md5 &>> {log} && "
+        "cat {wildcards.filename}.tar.gz.md5 &>> {log} && "
         "md5sum -c {wildcards.filename}.tar.gz.md5 &>> {log} && "
         "mv {wildcards.filename}.tar.gz {output.tarfile}"
 
