@@ -18,7 +18,7 @@ default-resources:
 resources:
   - concurrent_busco_downloads=5
   - concurrent_storage_uploads=5
-restart-times: 0
+restart-times: 2
 max-jobs-per-second: 50
 max-status-checks-per-second: 10
 local-cores: 2
