@@ -4,6 +4,7 @@ busco_manifest_path: file_versions.tsv
 busco_domains:
   # options: Prokaryota, Eukaryota, Virus
   - Eukaryota
+nr_database_path: "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz"
 nt_filename_pattern: "nt.[0-9]{3}.tar.gz"
 # Use snakemake prefixes, e.g. s3://endpoint.name for s3, or fs://path for
 # local folders. The endpoint is currently configured in the profile.
