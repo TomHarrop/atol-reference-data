@@ -18,7 +18,7 @@ rule diamond_makedb:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/diamond:2.1.11--h5ca1c30_1"
+        "docker://quay.io/biocontainers/diamond: 2.1.13--h13889ed_0"
     shell:
         "diamond makedb "
         "-p {threads} "
@@ -41,7 +41,7 @@ rule diamond_get_taxid_map:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/diamond:2.1.11--h5ca1c30_1"
+        "docker://quay.io/biocontainers/diamond: 2.1.13--h13889ed_0"
     shell:
         'echo -e "accession\\taccession.version\\ttaxid\\tgi" > {output.taxid_map} '
         "&& "
@@ -72,7 +72,7 @@ rule diamond_get_sequences:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/diamond:2.1.11--h5ca1c30_1"
+        "docker://quay.io/biocontainers/diamond: 2.1.13--h13889ed_0"
     shell:
         "touch {output.sequences} "
         "&& "
