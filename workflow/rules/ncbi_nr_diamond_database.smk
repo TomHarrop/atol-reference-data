@@ -32,7 +32,7 @@ rule download_nr_file:
     resources:
         runtime=400,
     log:
-        "logs/download_uniprot_file.log",
+        "logs/download_nr_file.log",
     shadow:
         "minimal"
     container:
