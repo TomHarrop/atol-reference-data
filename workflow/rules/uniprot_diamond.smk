@@ -5,7 +5,7 @@ rule diamond_makedb:
     input:
         taxid_map="results/diamond/reference_proteomes.taxid_map",
         sequences="results/diamond/reference_proteomes.fasta.gz",
-        nodes=to_storage("taxdump/nodes.dmp"),
+        nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
     output:
         dmnd=to_storage("diamond/reference_proteomes.dmnd", bucket_name="uniprot_diamond"),
     log:

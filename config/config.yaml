@@ -13,6 +13,7 @@ buckets:
   default: "s3://pawsey1132.atol.refdata.v0"
   kraken: "s3://pawsey1132.atol.refdata.kraken"
   ncbi: "s3://pawsey1132.atol.refdata.v1"
+  nr_diamond: "s3://pawsey1132.atol.refdata.nr.diamond"
   uniprot_diamond: "s3://pawsey1132.atol.refdata.uniprot.diamond"
   vecscreen: "s3://pawsey1132.atol.refdata.vecscreen"
 # output_prefix: "fs://test/results"

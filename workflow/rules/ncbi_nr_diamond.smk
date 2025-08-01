@@ -6,6 +6,8 @@ def ncbi_nr_urls(wildcards):
     return (file_url, Path(file_url).name)
 
 
+# to_storage("folder", bucket_name="nr_diamond")
+
 # rule expand_nr_file:
 #     input:
 #         gzfile="results/diamond_nr_database_files/nr.gz",
