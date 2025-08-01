@@ -5,7 +5,7 @@ rule upload_vecscreen_files:
     input:
         "results/vecscreen",
     output:
-        to_storage("vecscreen", storage_prefix="s3://pawsey1132.atol.refdata.misc"),
+        to_storage("vecscreen", bucket_name="vecscreen"),
     resources:
         runtime="10",
         storage_uploads=check_concurrent_storage_uploads,
