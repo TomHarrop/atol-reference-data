@@ -72,7 +72,7 @@ rule upload_busco_databases:
     input:
         "results/busco_databases/{lineage}",
     output:
-        to_storage("busco/lineages/{lineage}"),
+        to_storage("busco/lineages/{lineage}", bucket_name="busco"),
     priority: 50
     group:
         "busco"

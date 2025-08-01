@@ -18,7 +18,7 @@ rule upload_uniprot_files:
     input:
         "results/uniprot_reference_proteomes",
     output:
-        to_storage("uniprot_reference_proteomes"),
+        to_storage("uniprot_reference_proteomes", bucket_name="uniprot_diamond"),
     resources:
         runtime="23h",
         storage_uploads=check_concurrent_storage_uploads,

@@ -6,23 +6,22 @@ configfile: "config/config.yaml"
 
 include: "rules/common.smk"
 include: "rules/busco_databases.smk"
-include: "rules/diamond_database.smk"
+include: "rules/uniprot_diamond.smk"
 include: "rules/ncbi_nucleotide_blast.smk"
 include: "rules/ncbi_taxdump.smk"
 include: "rules/kraken_nt.smk"
 include: "rules/uniprot_reference_proteomes.smk"
-include: "rules/ncbi_nr_diamond_database.smk"
+include: "rules/ncbi_nr_diamond.smk"
 include: "rules/vecscreen.smk"
+
 
 rule all:
     default_target: True
     input:
         rules.busco_databases_target.input,
-        to_storage("diamond/reference_proteomes.dmnd"),
-        to_storage("uniprot_reference_proteomes"),
-        to_storage("kraken2_nt/taxo.k2d"),
-        to_storage("kraken2_nt/opts.k2d"),
-        to_storage("kraken2_nt/hash.k2d"),
-        # disabled because FTP is not working from setonix
-        # to_storage("taxdump/TIMESTAMP"), 
-        # to_storage("ncbi_nucleotide_blast"),
+        rules.diamond_makedb.output,
+        rules.kraken2_build_db.output,
+        rules.ncbi_taxdump.output,
+        rules.upload_blast_db_files.output,
+        rules.upload_uniprot_files.output,
+        rules.upload_vecscreen_files.output,

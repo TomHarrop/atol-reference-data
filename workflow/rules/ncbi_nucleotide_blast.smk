@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 
-@cache
 def get_list_of_blast_nt_files(wildcards):
+    listing_file = checkpoints.list_blast_db_directory.get(**wildcards).output.listing
+    logger.warning(f"listing_file: {listing_file}")
     filename_pattern = re.compile("^" + config["nt_filename_pattern"] + "$")
-    listing_file = checkpoints.list_blast_db_directory.get().output.listing
     files = get_files_from_listing_file(listing_file, filename_pattern)
-    return files
+    file_list = expand(
+        "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
+        filename=files,
+    )
+    return file_list
 
 
 rule upload_blast_db_files:
     input:
         "results/ncbi_nucleotide_blast",
     output:
-        to_storage("ncbi_nucleotide_blast"),
+        to_storage("ncbi_nucleotide_blast", bucket_name="ncbi"),
     resources:
         runtime="12h",
         storage_uploads=check_concurrent_storage_uploads,
@@ -25,11 +29,7 @@ rule upload_blast_db_files:
 
 rule expand_blast_db_files:
     input:
-        tarfiles=expand(
-            "results/ncbi_nucleotide_blast_files/{filename}.tar.gz",
-            filename=get_list_of_blast_nt_files,
-        ),
-        listing="results/ncbi_nucleotide_blast_files/listing.txt",
+        tarfiles=get_list_of_blast_nt_files,
     output:
         database_directory=temp(directory("results/ncbi_nucleotide_blast")),
     threads: 12

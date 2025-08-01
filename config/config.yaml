@@ -9,7 +9,11 @@ nt_filename_pattern: "nt.[0-9]{3}.tar.gz"
 # Use snakemake prefixes, e.g. s3://endpoint.name for s3, or fs://path for
 # local folders. The endpoint is currently configured in the profile.
 buckets:
+  busco: "s3://pawsey1132.atol.refdata.busco"
   default: "s3://pawsey1132.atol.refdata.v0"
+  kraken: "s3://pawsey1132.atol.refdata.kraken"
+  ncbi: "s3://pawsey1132.atol.refdata.v1"
+  uniprot_diamond: "s3://pawsey1132.atol.refdata.uniprot.diamond"
   vecscreen: "s3://pawsey1132.atol.refdata.vecscreen"
 # output_prefix: "fs://test/results"
 taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz

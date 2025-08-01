@@ -12,13 +12,13 @@ rule kraken2_build_db:
         taxonomy="results/kraken2_db/taxonomy",
         library="results/kraken2_db/library",
     output:
-        to_storage("kraken2_nt/prelim_map.txt"),
-        to_storage("kraken2_nt/unmapped_accessions.txt"),
-        to_storage("kraken2_nt/seqid2taxid.map"),
-        to_storage("kraken2_nt/estimated_capacity"),
-        to_storage("kraken2_nt/taxo.k2d"),
-        to_storage("kraken2_nt/opts.k2d"),
-        to_storage("kraken2_nt/hash.k2d"),
+        to_storage("kraken2_nt/prelim_map.txt", bucket_name="kraken"),
+        to_storage("kraken2_nt/unmapped_accessions.txt", bucket_name="kraken"),
+        to_storage("kraken2_nt/seqid2taxid.map", bucket_name="kraken"),
+        to_storage("kraken2_nt/estimated_capacity", bucket_name="kraken"),
+        to_storage("kraken2_nt/taxo.k2d", bucket_name="kraken"),
+        to_storage("kraken2_nt/opts.k2d", bucket_name="kraken"),
+        to_storage("kraken2_nt/hash.k2d", bucket_name="kraken"),
     log:
         "logs/kraken2_build_db.log",
     params:
