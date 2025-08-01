@@ -39,8 +39,9 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_makedb
+    diamond_makedb kraken2_build_db
 
+exit 0
 
 # delete if everything is there, disabled for now
 if [ $? -eq 0 ]; then
