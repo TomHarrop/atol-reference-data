@@ -33,6 +33,7 @@ rule download_nr_file:
         params=ncbi_nr_urls 
     resources:
         runtime="2d",
+        partitionFlag="--partition long",
     log:
         "logs/download_nr_file.log",
     shadow:
