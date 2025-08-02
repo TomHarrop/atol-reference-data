@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH --job-name=atol_refdata
-##SBATCH --partition=long
-#SBATCH --time=0-12
+#SBATCH --partition=long
+#SBATCH --time=2-00
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --mem=8g
@@ -35,7 +35,7 @@ fi
 # run the pipeline with notemp to avoid re-downloading the data
 snakemake \
     --profile profiles/pawsey_v8 \
-    --retries 2 \
+    --retries 0 \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \

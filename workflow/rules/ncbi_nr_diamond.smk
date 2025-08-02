@@ -32,7 +32,7 @@ rule download_nr_file:
     params:
         params=ncbi_nr_urls 
     resources:
-        runtime=600,
+        runtime="2d",
     log:
         "logs/download_nr_file.log",
     shadow:
