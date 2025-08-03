@@ -56,7 +56,7 @@ rule kraken2_download_library:
         "logs/kraken2_download_library.log",
     threads: 4
     resources:
-        runtime=lambda wildcards, attempt: f"{int(attempt*48)}H",
+        runtime=lambda wildcards, attempt: f"{int(attempt*24)}H",
         partitionFlag="--partition long",
     shadow:
         "minimal"
