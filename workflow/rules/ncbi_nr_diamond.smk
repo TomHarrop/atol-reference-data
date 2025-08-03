@@ -13,10 +13,10 @@ rule expand_nr_file:
     input:
         gzfile="results/diamond_nr_database_files/nr.gz",
     output:
-        database_directory=temp(directory("results/diamond_nr_database")),
+        database=temp("results/diamond_nr_database/nr"),
     threads: 2
     resources:
-        runtime=60,
+        runtime=360,
     shadow:
         "minimal"
     log:
@@ -25,7 +25,7 @@ rule expand_nr_file:
         "docker://quay.io/biocontainers/pigz:2.8"
     shell:
         "mkdir -p {output.database_directory} && "
-        "pigz -p {threads} -dc {input.gzfile} > {output.database_directory} 2> {log} && "
+        "pigz -p {threads} -dc {input.gzfile} > {output.database} 2> {log} && "
         "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
 
 
