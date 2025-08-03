@@ -8,22 +8,22 @@ def ncbi_nr_urls(wildcards):
 
 # to_storage("folder", bucket_name="nr_diamond")
 
-# rule expand_nr_file:
-#     input:
-#         gzfile="results/diamond_nr_database_files/nr.gz",
-#     output:
-#         database_directory=temp(directory("results/uniprot_reference_proteomes")),
-#     threads: 2
-#     resources:
-#         runtime=60,
-#     shadow:
-#         "minimal"
-#     container:
-#         "docker://quay.io/biocontainers/pigz:2.8"
-#     shell:
-#         "mkdir -p {output.database_directory} && "
-#         "pigz -p {threads} -dc {input.gzfile} && "
-#         "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
+rule expand_nr_file:
+    input:
+        gzfile="results/diamond_nr_database_files/nr.gz",
+    output:
+        database_directory=temp(directory("results/diamond_nr_database")),
+    threads: 2
+    resources:
+        runtime=60,
+    shadow:
+        "minimal"
+    container:
+        "docker://quay.io/biocontainers/pigz:2.8"
+    shell:
+        "mkdir -p {output.database_directory} && "
+        "pigz -p {threads} -dc {input.gzfile} && "
+        "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
 
 
 rule download_nr_file:

@@ -39,7 +39,7 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_makedb kraken2_build_db download_nr_file
+    diamond_makedb kraken2_build_db expand_nr_file
 
 exit 0
 

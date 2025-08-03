@@ -33,7 +33,7 @@ rule kraken2_build_db:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
+        "docker://quay.io/biocontainers/kraken2:2.1.6--pl5321h077b44d_0"
     shell:
         "ln -s $(readlink -f {input.taxonomy}) {params.db}/ && "
         "ln -s $(readlink -f {input.library}) {params.db}/ && "
@@ -61,7 +61,7 @@ rule kraken2_download_library:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
+        "docker://quay.io/biocontainers/kraken2:2.1.6--pl5321h077b44d_0"
     shell:
         "k2 download-library "
         "--threads {threads} "
@@ -81,7 +81,7 @@ rule kraken2_download_taxonomy:
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
     container:
-        "docker://quay.io/biocontainers/kraken2:2.14--pl5321h077b44d_0"
+        "docker://quay.io/biocontainers/kraken2:2.1.6--pl5321h077b44d_0"
     shell:
         "k2 download-taxonomy "
         "--db {params.db} "
