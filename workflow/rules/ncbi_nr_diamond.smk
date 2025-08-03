@@ -14,6 +14,7 @@ rule expand_nr_file:
         gzfile="results/diamond_nr_database_files/nr.gz",
     output:
         database=temp("results/diamond_nr_database/nr"),
+        timestamp=temp("results/diamond_nr_database/TIMESTAMP"),
     threads: 2
     resources:
         runtime=360,
@@ -24,9 +25,8 @@ rule expand_nr_file:
     container:
         "docker://quay.io/biocontainers/pigz:2.8"
     shell:
-        "mkdir -p {output.database_directory} && "
         "pigz -p {threads} -dc {input.gzfile} > {output.database} 2> {log} && "
-        "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
+        "printf $(date -Iseconds) > {output.timestamp}"
 
 
 rule download_nr_file:
