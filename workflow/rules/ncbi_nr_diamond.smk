@@ -8,6 +8,7 @@ def ncbi_nr_urls(wildcards):
 
 # to_storage("folder", bucket_name="nr_diamond")
 
+
 rule expand_nr_file:
     input:
         gzfile="results/diamond_nr_database_files/nr.gz",
@@ -18,11 +19,13 @@ rule expand_nr_file:
         runtime=60,
     shadow:
         "minimal"
+    log:
+        "logs/expand_nr_file.log",
     container:
         "docker://quay.io/biocontainers/pigz:2.8"
     shell:
         "mkdir -p {output.database_directory} && "
-        "pigz -p {threads} -dc {input.gzfile} && "
+        "pigz -p {threads} -dc {input.gzfile} > {output.database_directory} 2> {log} && "
         "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP"
 
 
@@ -30,7 +33,7 @@ rule download_nr_file:
     output:
         gzfile=temp("results/diamond_nr_database_files/nr.gz"),
     params:
-        params=ncbi_nr_urls 
+        params=ncbi_nr_urls,
     resources:
         runtime="2d",
         partitionFlag="--partition long",
