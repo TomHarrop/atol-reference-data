@@ -100,7 +100,9 @@ rule download_ncbi:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
+        # gnu wget container uses a different like the md5 file that comes with
+        # the accession2taxid file.
+        "docker://debian:stable-20250113"
     shell:
         "wget {params[urls][url]} -O {params[urls][filename]} 2> {log} && "
         "wget {params[urls][url]}.md5 -O {params[urls][filename]}.md5 2>> {log} && "
