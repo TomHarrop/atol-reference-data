@@ -39,7 +39,10 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_makedb upload_kraken_nt_db expand_nr_file taxid_map
+    diamond_makedb \
+    expand_nr_file \
+    taxid_map \
+    upload_kraken_nt_db
 
 exit 0
 

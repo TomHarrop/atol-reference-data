@@ -11,18 +11,18 @@
 rule diamond_nr_makedb:
     input:
         sequences="results/diamond/reference_proteomes.fasta.gz",
+        taxid_map="results/diamond_nr_database_files/nr.taxid_map",
         nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
     output:
-        dmnd=to_storage(
-            "diamond/reference_proteomes.dmnd", bucket_name="uniprot_diamond"
-        ),
+        dmnd=to_storage("diamond/nr.dmnd", bucket_name="nr_diamond"),
     log:
         "logs/diamond_makedb.log",
     threads: 24
     resources:
         storage_uploads=check_concurrent_storage_uploads,
-        runtime=lambda wildcards, attempt: int(attempt * 60),
-        mem=lambda wildcards, attempt: f"{int(128)* attempt}GB",
+        runtime="1d",
+        mem="256GB",
+        partitionFlag="--partition highmem",
     shadow:
         "minimal"
     container:

@@ -20,6 +20,7 @@ rule all:
     input:
         rules.busco_databases_target.input,
         rules.diamond_makedb.output,
+        rules.diamond_nr_makedb.output,
         rules.ncbi_taxdump.output,
         rules.upload_blast_db_files.output,
         rules.upload_kraken_nt_db.output,

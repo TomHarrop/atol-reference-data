@@ -52,8 +52,8 @@ rule download_kraken_nt_db:
     log:
         "logs/download_kraken_nt_db.log",
     resources:
-        runtime="23h",
-        # partitionFlag="--partition long",
+        runtime="2d",
+        partitionFlag="--partition long",
     shadow:
         "minimal"
     container:
