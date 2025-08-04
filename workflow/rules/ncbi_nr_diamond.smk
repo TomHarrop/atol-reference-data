@@ -61,7 +61,7 @@ rule diamond_nr_taxid_map:
         "zcat {input.p2a} "
         "2>> {log} "
         "| "
-        "tail -n +1 "
+        "tail -n +2 "
         "| "
         'awk \'{{print $1 "\\t" $1 "\\t" $2 "\\t" 0}}\' '
         ">> {output.taxid_map} "
@@ -100,11 +100,11 @@ rule download_ncbi:
     shadow:
         "minimal"
     container:
-        # gnu wget container uses a different like the md5 file that comes with
-        # the accession2taxid file.
-        "docker://debian:stable-20250113"
+        # gnu wget container doesn't like the md5 file that comes with the
+        # accession2taxid file.
+        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
     shell:
         "wget {params[urls][url]} -O {params[urls][filename]} 2> {log} && "
         "wget {params[urls][url]}.md5 -O {params[urls][filename]}.md5 2>> {log} && "
-        "md5sum -c {params[urls][filename]}.md5 2>> {log} && "
+        "sed 's/^[[:space:]]*//' {params[urls][filename]}.md5 | md5sum -c - 2>> {log} && "
         "mv {params[urls][filename]} {output.filename}"
