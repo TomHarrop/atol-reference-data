@@ -37,14 +37,18 @@ rule diamond_nr_makedb:
         "2>> {log} "
 
 
-
+# FORMAT
+# accession	accession.version	taxid	gi
+# A0A395GHB9	A0A395GHB9	1448316	0
+# A0A395GHC3	A0A395GHC3	1448316	0
+# A0A395GHC5	A0A395GHC5	1448316	0
 rule diamond_nr_taxid_map:
     input:
-        database_directory="results/uniprot_reference_proteomes",
+        p2a="results/diamond_nr_database_files/prot.accession2taxid.FULL.gz",
     output:
-        taxid_map="results/diamond/reference_proteomes.taxid_map",
+        taxid_map="results/diamond_nr_database_files/nr.taxid_map",
     log:
-        "logs/diamond_get_taxid_map.log",
+        "logs/diamond_nr_taxid_map.log",
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 120),
     shadow:
@@ -54,17 +58,12 @@ rule diamond_nr_taxid_map:
     shell:
         'echo -e "accession\\taccession.version\\ttaxid\\tgi" > {output.taxid_map} '
         "&& "
-        "find {input.database_directory}/ "
-        "-name '*.idmapping.gz' "
+        "zcat {input.p2a} "
         "2>> {log} "
         "| "
-        "xargs zcat "
-        "2>> {log} "
+        "tail -n +1 "
         "| "
-        'grep "NCBI_TaxID" '
-        "2>> {log} "
-        "| "
-        'awk \'{{print $1 "\\t" $1 "\\t" $3 "\\t" 0}}\' '
+        'awk \'{{print $1 "\\t" $1 "\\t" $2 "\\t" 0}}\' '
         ">> {output.taxid_map} "
         "2>> {log} "
 
