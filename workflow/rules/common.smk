@@ -31,12 +31,35 @@ def check_concurrent_storage_uploads(wildcards):
         return None
 
 
+def get_files_from_listing_file(listing_file, filename_pattern):
+    files = []
+    with open(listing_file) as f:
+        for line in f:
+            splitline = line.split()[-1]
+            if re.search(filename_pattern, splitline):
+                files.append(splitline.rstrip(".tar.gz"))
+    if len(files) == 0:
+        logger.error(listing_file)
+        raise ValueError(
+            f"No files found in {listing_file} matching {filename_pattern}"
+        )
+    return files
+
+
 def get_storage_path(path_string):
     logger.debug(f"path_string: {path_string}")
     path_string_url = urlparse(path_string)
     netloc = path_string_url.netloc.lstrip("/")
     path = path_string_url.path.lstrip("/")
     return (path_string_url.scheme, Path(netloc, path).as_posix())
+
+
+def ncbiurls(wildcards, output):
+    """
+    Works for NCBI files, because they always have an md5sum file in the same place.
+    """
+    file_url = config[wildcards.filename]
+    return {"url": file_url, "filename": Path(file_url).name}
 
 
 def to_storage(path_string, bucket_name=None):
@@ -59,21 +82,6 @@ def to_storage(path_string, bucket_name=None):
         raise NotImplementedError(f"TODO: implement {scheme}")
 
     raise NotImplementedError(f"Unknown storage scheme {scheme}")
-
-
-def get_files_from_listing_file(listing_file, filename_pattern):
-    files = []
-    with open(listing_file) as f:
-        for line in f:
-            splitline = line.split()[-1]
-            if re.search(filename_pattern, splitline):
-                files.append(splitline.rstrip(".tar.gz"))
-    if len(files) == 0:
-        logger.error(listing_file)
-        raise ValueError(
-            f"No files found in {listing_file} matching {filename_pattern}"
-        )
-    return files
 
 
 for bucket_name, bucket_url in buckets.items():

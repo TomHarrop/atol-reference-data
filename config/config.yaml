@@ -6,8 +6,10 @@ busco_domains:
   - Eukaryota
 kraken_core_nt_db_url: "https://genome-idx.s3.amazonaws.com/kraken/k2_core_nt_20250609.tar.gz"
 kraken_core_nt_db_checksum: "https://genome-idx.s3.amazonaws.com/kraken/core_nt_20250609/core_nt.md5"
-nr_database_path: "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz"
+nr.gz: "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz"
+prot.accession2taxid.FULL.gz: "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid/prot.accession2taxid.FULL.gz"
 nt_filename_pattern: "nt.[0-9]{3}.tar.gz"
+
 # Use snakemake prefixes, e.g. s3://endpoint.name for s3, or fs://path for
 # local folders. The endpoint is currently configured in the profile.
 buckets:
