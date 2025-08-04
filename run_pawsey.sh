@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=atol_refdata
 #SBATCH --partition=long
-#SBATCH --time=1-00
+#SBATCH --time=0-23
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --mem=8g
@@ -39,7 +39,7 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_makedb kraken2_build_db expand_nr_file
+    diamond_makedb upload_kraken_nt_db expand_nr_file
 
 exit 0
 
@@ -51,6 +51,6 @@ if [ $? -eq 0 ]; then
         --delete-temp-output \
         --cleanup-shadow \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        diamond_makedb
+        diamond_makedb upload_kraken_nt_db expand_nr_file
 fi
 

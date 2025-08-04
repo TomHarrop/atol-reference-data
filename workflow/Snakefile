@@ -20,8 +20,8 @@ rule all:
     input:
         rules.busco_databases_target.input,
         rules.diamond_makedb.output,
-        rules.kraken2_build_db.output,
         rules.ncbi_taxdump.output,
         rules.upload_blast_db_files.output,
+        rules.upload_kraken_nt_db.output,
         rules.upload_uniprot_files.output,
         rules.upload_vecscreen_files.output,
