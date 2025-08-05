@@ -10,8 +10,8 @@
 
 rule diamond_nr_makedb:
     input:
-        sequences="results/diamond_nr_database_files/nr",
-        taxid_map="results/diamond_nr_database_files/nr.taxid_map",
+        sequences="results/diamond_nr_database/nr.fasta",
+        taxid_map="results/diamond_nr_database/nr.taxid_map",
         nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
     output:
         dmnd=to_storage("diamond/nr.dmnd", bucket_name="nr_diamond"),
@@ -47,9 +47,9 @@ rule diamond_nr_makedb:
 # A0A395GHC5	A0A395GHC5	1448316	0
 rule diamond_nr_taxid_map:
     input:
-        p2a="results/diamond_nr_database_files/prot.accession2taxid.FULL.gz",
+        p2a="results/downloads/prot.accession2taxid.FULL.gz",
     output:
-        taxid_map="results/diamond_nr_database_files/nr.taxid_map",
+        taxid_map="results/diamond_nr_database/nr.taxid_map",
     log:
         "logs/diamond_nr_taxid_map.log",
     resources:
@@ -73,9 +73,9 @@ rule diamond_nr_taxid_map:
 
 rule expand_nr_file:
     input:
-        gzfile="results/diamond_nr_database_files/nr.gz",
+        gzfile="results/downloads/nr.gz",
     output:
-        database=temp("results/diamond_nr_database_files/nr.fasta"),
+        database=temp("results/diamond_nr_database/nr.fasta"),
     threads: 2
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
@@ -91,7 +91,7 @@ rule expand_nr_file:
 
 rule download_ncbi:
     output:
-        filename=temp("results/diamond_nr_database_files/{filename}"),
+        filename=temp("results/downloads/{filename}"),
     params:
         urls=ncbiurls,
     log:
