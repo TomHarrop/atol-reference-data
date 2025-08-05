@@ -53,6 +53,8 @@ if [ $? -eq 0 ]; then
         --delete-temp-output \
         --cleanup-shadow \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        diamond_makedb upload_kraken_nt_db expand_nr_file taxid_map
+        diamond_makedb \
+        diamond_nr_makedb \
+        upload_kraken_nt_db
 fi
 
