@@ -52,8 +52,8 @@ rule download_kraken_nt_db:
     log:
         "logs/download_kraken_nt_db.log",
     resources:
-        runtime="2d",
-        partitionFlag="--partition long",
+        runtime="1d",
+        # partitionFlag="--partition long",
     shadow:
         "minimal"
     container:
@@ -61,5 +61,6 @@ rule download_kraken_nt_db:
     shell:
         "wget {params.url} -O {kraken_core_nt_filename} &> {log} && "
         "wget {params.checksum} -O {kraken_core_nt_filename}.md5 &>> {log} && "
-        "md5sum -c {kraken_core_nt_filename}.md5 &>> {log} && "
+        'grep "{kraken_core_nt_filename}" {kraken_core_nt_filename}.md5 '
+        "| md5sum -c - &>> {log} && "
         "mv {kraken_core_nt_filename} {output.tarfile}"
