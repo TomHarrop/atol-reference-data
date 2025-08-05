@@ -53,7 +53,7 @@ rule diamond_nr_taxid_map:
     log:
         "logs/diamond_nr_taxid_map.log",
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 120),
+        runtime=lambda wildcards, attempt: int(attempt * 60),
     shadow:
         "minimal"
     container:
@@ -78,7 +78,7 @@ rule expand_nr_file:
         database=temp("results/diamond_nr_database/nr.fasta"),
     threads: 2
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 60),
+        runtime="1d",
     shadow:
         "minimal"
     log:

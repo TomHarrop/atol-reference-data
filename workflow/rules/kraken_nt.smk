@@ -10,7 +10,7 @@ rule upload_kraken_nt_db:
     output:
         to_storage("k2_core_nt", bucket_name="kraken"),
     resources:
-        runtime="23h",
+        runtime="1d",
         storage_uploads=check_concurrent_storage_uploads,
     container:
         "docker://debian:stable-20250113"
