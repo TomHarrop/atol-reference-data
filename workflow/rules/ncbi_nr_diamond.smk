@@ -10,11 +10,12 @@
 
 rule diamond_nr_makedb:
     input:
-        sequences="results/diamond_nr_database_files/nr.gz",
+        sequences="results/diamond_nr_database_files/nr",
         taxid_map="results/diamond_nr_database_files/nr.taxid_map",
         nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
     output:
         dmnd=to_storage("diamond/nr.dmnd", bucket_name="nr_diamond"),
+        timestamp=to_storage("diamond/TIMESTAMP"),
     log:
         "logs/diamond_makedb.log",
     threads: 24
@@ -35,6 +36,8 @@ rule diamond_nr_makedb:
         "--taxonnodes {input.nodes} "
         "-d {output.dmnd} "
         "2>> {log} "
+        "&& "
+        "printf $(date -Iseconds) > {output.timestamp}"
 
 
 # FORMAT
@@ -73,7 +76,6 @@ rule expand_nr_file:
         gzfile="results/diamond_nr_database_files/nr.gz",
     output:
         database=temp("results/diamond_nr_database_files/nr.fasta"),
-        timestamp=temp("results/diamond_nr_database/TIMESTAMP"),
     threads: 2
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
@@ -84,8 +86,7 @@ rule expand_nr_file:
     container:
         "docker://quay.io/biocontainers/pigz:2.8"
     shell:
-        "pigz -p {threads} -dc {input.gzfile} > {output.database} 2> {log} && "
-        "printf $(date -Iseconds) > {output.timestamp}"
+        "pigz -p {threads} -dc {input.gzfile} > {output.database} 2> {log}"
 
 
 rule download_ncbi:
