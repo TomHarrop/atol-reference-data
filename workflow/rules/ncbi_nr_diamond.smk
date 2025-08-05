@@ -10,7 +10,7 @@
 
 rule diamond_nr_makedb:
     input:
-        sequences="results/diamond/reference_proteomes.fasta.gz",
+        sequences="results/diamond_nr_database_files/nr.gz",
         taxid_map="results/diamond_nr_database_files/nr.taxid_map",
         nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
     output:
