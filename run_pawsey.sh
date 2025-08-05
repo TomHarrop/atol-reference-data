@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=atol_refdata
 #SBATCH --partition=long
-#SBATCH --time=0-23
+#SBATCH --time=4-00
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --mem=8g
