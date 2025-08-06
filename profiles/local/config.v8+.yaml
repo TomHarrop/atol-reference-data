@@ -5,8 +5,8 @@ __definitions__:
   - from tempfile import mkdtemp
   - tmpdir = mkdtemp()
 default-resources:
-  concurrent_busco_downloads: 1
-  concurrent_storage_uploads: 1
+  concurrent_busco_downloads: 3
+  concurrent_storage_uploads: 3
 restart-times: 0
 local-cores: 2
 cores: 50
