@@ -3,6 +3,8 @@
 busco_bucket = "busco"
 
 
+raise ValueError(workflow.resource_settings)
+
 def check_concurrent_busco_downloads(wildcards):
     """
     The BUSCO server returns 503 if you hit it with a lot of parallel
