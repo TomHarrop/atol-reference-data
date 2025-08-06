@@ -99,7 +99,8 @@ rule upload_busco_databases:
     container:
         "docker://debian:stable-20250113"
     shell:
-        "cp -r {input} {output}"
+        "cp -r {input} {output} "
+        "&& ls -lhrt {output}"
 
 
 rule expand_busco_lineage_files:
