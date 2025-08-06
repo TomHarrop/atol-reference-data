@@ -94,14 +94,10 @@ rule upload_busco_databases:
     resources:
         runtime=lambda wildcards, attempt: int(attempt * 60),
         storage_uploads=check_concurrent_storage_uploads,
-    shadow:
-        "minimal"
     container:
         "docker://debian:stable-20250113"
     shell:
         "cp -r {input} {output} "
-        "&& ls -lhrt {output}"
-
 
 rule expand_busco_lineage_files:
     input:

@@ -17,7 +17,13 @@ keep-storage-local-copies: true
 rerun-incomplete: true
 printshellcmds: true
 use-singularity: true
+use-apptainer: true
 use-conda: False
+apptainer-args: ?f"-B $PWD,{tmpdir}
+  --nv
+  -H $(mktemp -d)
+  --pwd $PWD
+  --containall --cleanenv --writable-tmpfs"
 singularity-args: ?f"-B $PWD,{tmpdir}
   --nv
   -H $(mktemp -d)
