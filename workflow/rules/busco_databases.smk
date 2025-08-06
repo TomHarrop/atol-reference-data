@@ -3,8 +3,6 @@
 busco_bucket = "busco"
 
 
-raise ValueError(workflow.resource_settings)
-
 def check_concurrent_busco_downloads(wildcards):
     """
     The BUSCO server returns 503 if you hit it with a lot of parallel
@@ -16,7 +14,11 @@ def check_concurrent_busco_downloads(wildcards):
 
     """
 
-    if "concurrent_busco_downloads" not in workflow.resource_settings.resources:
+    if (
+        "concurrent_busco_downloads" not in workflow.resource_settings.resources
+        and "concurrent_busco_downloads"
+        not in workflow.resource_settings.default_resources.parsed
+    ):
         logger.error(workflow.resource_settings)
         raise ValueError(
             "You must set the number of concurrent_busco_downloads in the profile or on the command line"
