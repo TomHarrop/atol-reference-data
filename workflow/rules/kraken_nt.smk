@@ -39,7 +39,7 @@ rule expand_kraken_nt_db:
         "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP && "
         "printf '%s\\n' {kraken_core_nt_db_url} > {output.database_directory}/URL && "
         "k2 inspect "
-        "{output.database_directory} "
+        "--db {output.database_directory} "
         "--output {output.database_directory}/INSPECT.txt "
         "2>> {log} "
 

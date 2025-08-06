@@ -45,30 +45,52 @@ rule diamond_nr_makedb:
 # A0A395GHB9	A0A395GHB9	1448316	0
 # A0A395GHC3	A0A395GHC3	1448316	0
 # A0A395GHC5	A0A395GHC5	1448316	0
+# rule diamond_nr_taxid_map:
+#     input:
+#         p2a="results/downloads/prot.accession2taxid.FULL.gz",
+#     output:
+#         taxid_map="results/diamond_nr_database/nr.taxid_map",
+#     log:
+#         "logs/diamond_nr_taxid_map.log",
+#     resources:
+#         runtime="1d",
+#     shadow:
+#         "minimal"
+#     container:
+#         "docker://quay.io/biocontainers/diamond:2.1.13--h13889ed_0"
+#     shell:
+#         'echo -e "accession\\taccession.version\\ttaxid\\tgi" > {output.taxid_map} '
+#         "&& "
+#         "zcat {input.p2a} "
+#         "2>> {log} "
+#         "| "
+#         "tail -n +2 "
+#         "| "
+#         'awk \'{{print $1 "\\t" $1 "\\t" $2 "\\t" 0}}\' '
+#         ">> {output.taxid_map} "
+#         "2>> {log} "
+
+
 rule diamond_nr_taxid_map:
     input:
-        p2a="results/downloads/prot.accession2taxid.FULL.gz",
+         p2a="results/downloads/prot.accession2taxid.FULL.gz",
     output:
         taxid_map="results/diamond_nr_database/nr.taxid_map",
     log:
         "logs/diamond_nr_taxid_map.log",
+    benchmark:
+        "logs/benchmarks/diamond_nr_taxid_map.txt",
     resources:
         runtime="1d",
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/diamond:2.1.13--h13889ed_0"
+        "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
     shell:
-        'echo -e "accession\\taccession.version\\ttaxid\\tgi" > {output.taxid_map} '
-        "&& "
-        "zcat {input.p2a} "
-        "2>> {log} "
-        "| "
-        "tail -n +2 "
-        "| "
-        'awk \'{{print $1 "\\t" $1 "\\t" $2 "\\t" 0}}\' '
-        ">> {output.taxid_map} "
-        "2>> {log} "
+        'Rscript -e "'
+        "library(data.table); "
+        "fwrite(fread(cmd=paste('zcat','{input.p2a}'))[,.(accession=accession,accession.version=accession,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
+        '"'
 
 
 rule expand_nr_file:
