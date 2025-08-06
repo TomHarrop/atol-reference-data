@@ -15,6 +15,7 @@ def check_concurrent_busco_downloads(wildcards):
 
     """
 
+    # this should work, but it doesn't get propagated to the shadow directory for some reason.
     # if "concurrent_busco_downloads" not in workflow.resource_settings.resources:
     #     logger.error(workflow.resource_settings)
     #     raise ValueError(

@@ -34,7 +34,8 @@ rule expand_kraken_nt_db:
         "docker://quay.io/biocontainers/kraken2:2.1.6--pl5321h077b44d_0"
     shell:
         "mkdir -p {output.database_directory} && "
-        "pigz -p {threads} -dc {input.tarfile} | tar -xv -C {output.database_directory} 2> {log} && "
+        "gzip -dc {input.tarfile} | tar -xv -C {output.database_directory} "
+        "2> {log} && "
         "printf $(date -Iseconds) > {output.database_directory}/TIMESTAMP && "
         "printf '%s\\n' {kraken_core_nt_db_url} > {output.database_directory}/URL && "
         "k2 inspect "
