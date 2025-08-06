@@ -53,7 +53,7 @@ rule diamond_nr_taxid_map:
     log:
         "logs/diamond_nr_taxid_map.log",
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 360),
+        runtime="1d",
     shadow:
         "minimal"
     container:

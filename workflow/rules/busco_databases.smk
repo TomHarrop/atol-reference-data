@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+busco_bucket = "busco"
+
 
 def check_concurrent_busco_downloads(wildcards):
     """
@@ -20,9 +22,19 @@ def check_concurrent_busco_downloads(wildcards):
     return 1
 
 
+def get_list_of_datasets(busco_dataset_names):
+    with open(busco_dataset_names, "rt") as f:
+        return list(x.strip() for x in f)
+
+
 def get_busco_databases_target(wildcards):
-    manifest = read_manifest(wildcards)
-    return list(to_storage(f"busco/lineages/{x}") for x in manifest.keys())
+    dataset_names = get_list_of_datasets(busco_dataset_names)
+    return list(
+        to_storage(
+            f"busco/lineages/{x}_{busco_dataset_version}", bucket_name=busco_bucket
+        )
+        for x in dataset_names
+    )
 
 
 def get_busco_manifest_url(wildcards):
@@ -50,12 +62,12 @@ def get_my_manifest(wildcards):
 
 @cache
 def read_manifest(wildcards):
-    manifest = checkpoints.download_busco_manifest.get().output[0]
+    manifest = rules.download_busco_manifest.output[0]
     lineage_to_hash = {}
     with open(manifest) as f:
         for line in f:
             line_split = line.strip().split("\t")
-            if line_split[4] == "lineages" and line_split[3] in busco_domains:
+            if line_split[4] == "lineages":
                 lineage_to_hash[line_split[0]] = {
                     "date": line_split[1],
                     "hash": line_split[2],
@@ -72,7 +84,7 @@ rule upload_busco_databases:
     input:
         "results/busco_databases/{lineage}",
     output:
-        to_storage("busco/lineages/{lineage}", bucket_name="busco"),
+        to_storage("busco/lineages/{lineage}", bucket_name=busco_bucket),
     priority: 50
     group:
         "busco"
@@ -132,7 +144,7 @@ rule download_busco_lineage_files:
         "printf '%s %s' {params.lineage_hash}  {output} | md5sum -c - &>> {log}"
 
 
-checkpoint download_busco_manifest:
+rule download_busco_manifest:
     output:
         "results/busco_lineage_files/file_versions.tsv",
     params:
