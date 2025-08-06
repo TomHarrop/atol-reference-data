@@ -4,7 +4,7 @@ __use_yte__: true
 __definitions__:
   - from tempfile import mkdtemp
   - tmpdir = mkdtemp()
-default-resources:
+resources:
   concurrent_busco_downloads: 3
   concurrent_storage_uploads: 3
 restart-times: 0

@@ -2,6 +2,7 @@
 
 busco_bucket = "busco"
 
+# raise ValueError(workflow.resource_settings.resources)
 
 def check_concurrent_busco_downloads(wildcards):
     """
@@ -14,15 +15,11 @@ def check_concurrent_busco_downloads(wildcards):
 
     """
 
-    if (
-        "concurrent_busco_downloads" not in workflow.resource_settings.resources
-        and "concurrent_busco_downloads"
-        not in workflow.resource_settings.default_resources.parsed
-    ):
-        logger.error(workflow.resource_settings)
-        raise ValueError(
-            "You must set the number of concurrent_busco_downloads in the profile or on the command line"
-        )
+    # if "concurrent_busco_downloads" not in workflow.resource_settings.resources:
+    #     logger.error(workflow.resource_settings)
+    #     raise ValueError(
+    #         "You must set the number of concurrent_busco_downloads in the profile or on the command line"
+    #     )
 
     return 1
 
