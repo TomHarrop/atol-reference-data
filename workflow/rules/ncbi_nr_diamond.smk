@@ -100,7 +100,7 @@ rule diamond_nr_taxid_map:
         "library(data.table); "
         "getDTthreads(verbose=TRUE); "
         "fwrite(fread('in.tsv')[,.(accession=accession.version,accession.version=accession.version,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
-        '"'
+        '" '
         "&> {log}"
 
 
