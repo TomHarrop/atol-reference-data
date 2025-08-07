@@ -70,11 +70,12 @@ rule diamond_nr_makedb:
 #         ">> {output.taxid_map} "
 #         "2>> {log} "
 
-
+# Mung the taxid map with R. The streaming approach with bash and awk uses
+# basically no memory but takes days to run. This is the opposite.
 rule diamond_nr_taxid_map:
     input:
         p2a="results/downloads/prot.accession2taxid.FULL.gz",
-    # p2a="prot.accession2taxid.gz",
+        # p2a="prot.accession2taxid1000.gz",
     output:
         taxid_map="results/diamond_nr_database/nr.taxid_map",
         # taxid_map="nr.taxid_map",
@@ -83,8 +84,8 @@ rule diamond_nr_taxid_map:
     benchmark:
         "logs/benchmarks/diamond_nr_taxid_map.txt"
     resources:
-        runtime="1d",
-        mem="128GB",
+        runtime="12h",
+        mem="200GB",
     shadow:
         "minimal"
     container:
