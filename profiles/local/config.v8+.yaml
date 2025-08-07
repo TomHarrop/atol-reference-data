@@ -16,20 +16,14 @@ keep-going: true
 keep-storage-local-copies: true
 rerun-incomplete: true
 printshellcmds: true
-use-singularity: true
 use-apptainer: true
 use-conda: False
 apptainer-args: ?f"-B $PWD,{tmpdir}
   --nv
   -H $(mktemp -d)
   --pwd $PWD
-  --containall --cleanenv --writable-tmpfs"
-singularity-args: ?f"-B $PWD,{tmpdir}
-  --nv
-  -H $(mktemp -d)
-  --pwd $PWD
-  --containall --cleanenv --writable-tmpfs"
-singularity-prefix: $HOME/.apptainer/cache/library
+  --containall --cleanenv --writable-tmpfs
+  --env SLURM_CPUS_ON_NODE=$SLURM_CPUS_ON_NODE"
 apptainer-prefix: $HOME/.apptainer/cache/library
 shadow-prefix: ?tmpdir
 # s3

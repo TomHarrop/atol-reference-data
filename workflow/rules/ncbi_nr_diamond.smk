@@ -70,6 +70,7 @@ rule diamond_nr_makedb:
 #         ">> {output.taxid_map} "
 #         "2>> {log} "
 
+
 # Mung the taxid map with R. The streaming approach with bash and awk uses
 # basically no memory but takes days to run. This is the opposite.
 rule diamond_nr_taxid_map:
@@ -83,19 +84,24 @@ rule diamond_nr_taxid_map:
         "logs/diamond_nr_taxid_map.log",
     benchmark:
         "logs/benchmarks/diamond_nr_taxid_map.txt"
+    threads: 12
     resources:
         runtime="12h",
-        mem="200GB",
+        mem="256GB",
+        partitionFlag="--partition highmem",
     shadow:
         "minimal"
     container:
         "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
     shell:
+        "export R_DATATABLE_NUM_THREADS=${{SLURM_CPUS_ON_NODE:-{threads}}} && "
         "gzip -dc {input.p2a} > in.tsv && "
         'Rscript -e "'
         "library(data.table); "
+        "getDTthreads(verbose=TRUE); "
         "fwrite(fread('in.tsv')[,.(accession=accession.version,accession.version=accession.version,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
         '"'
+        "&> {log}"
 
 
 rule expand_nr_file:
