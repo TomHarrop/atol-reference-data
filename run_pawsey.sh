@@ -39,9 +39,7 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_makedb \
-    diamond_nr_makedb \
-    upload_kraken_nt_db
+    diamond_nr_makedb
 
 exit 0
 
@@ -53,8 +51,6 @@ if [ $? -eq 0 ]; then
         --delete-temp-output \
         --cleanup-shadow \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        diamond_makedb \
-        diamond_nr_makedb \
-        upload_kraken_nt_db
+        diamond_nr_makedb 
 fi
 
