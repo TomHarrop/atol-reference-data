@@ -86,7 +86,7 @@ rule diamond_nr_taxid_map:
         "logs/benchmarks/diamond_nr_taxid_map.txt"
     threads: 12
     resources:
-        runtime="4h",
+        runtime="12h",
         mem="256GB",
         partitionFlag="--partition highmem",
     shadow:
