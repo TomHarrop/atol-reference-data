@@ -73,23 +73,27 @@ rule diamond_nr_makedb:
 
 rule diamond_nr_taxid_map:
     input:
-         p2a="results/downloads/prot.accession2taxid.FULL.gz",
+        p2a="results/downloads/prot.accession2taxid.FULL.gz",
+    # p2a="prot.accession2taxid.gz",
     output:
         taxid_map="results/diamond_nr_database/nr.taxid_map",
+        # taxid_map="nr.taxid_map",
     log:
         "logs/diamond_nr_taxid_map.log",
     benchmark:
-        "logs/benchmarks/diamond_nr_taxid_map.txt",
+        "logs/benchmarks/diamond_nr_taxid_map.txt"
     resources:
         runtime="1d",
+        mem="128GB",
     shadow:
         "minimal"
     container:
         "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
     shell:
+        "gzip -dc {input.p2a} > in.tsv && "
         'Rscript -e "'
         "library(data.table); "
-        "fwrite(fread(cmd=paste('zcat','{input.p2a}'))[,.(accession=accession,accession.version=accession,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
+        "fwrite(fread('in.tsv')[,.(accession=accession.version,accession.version=accession.version,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
         '"'
 
 
