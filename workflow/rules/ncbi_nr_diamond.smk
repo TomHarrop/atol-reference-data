@@ -87,14 +87,14 @@ rule diamond_nr_taxid_map:
     threads: 12
     resources:
         runtime="12h",
-        mem="256GB",
+        mem="512B",
         partitionFlag="--partition highmem",
     shadow:
         "minimal"
     container:
         "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
     shell:
-        "export R_DATATABLE_NUM_THREADS=${{SLURM_CPUS_ON_NODE:-{threads}}} && "
+        "export R_DATATABLE_NUM_THREADS={threads} && "
         "gzip -dc {input.p2a} > in.tsv && "
         'Rscript -e "'
         "library(data.table); "
