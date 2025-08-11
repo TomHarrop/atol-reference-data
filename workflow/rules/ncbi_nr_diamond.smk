@@ -130,6 +130,8 @@ rule diamond_nr_join_taxid_map_chunks:
         runtime=60,
     benchmark:
         "logs/benchmarks/diamond_nr_join_taxid_map_chunks.txt"
+    shadow:
+        "minimal"
     container:
         "docker://debian:stable-20250113"
     script:
@@ -149,6 +151,8 @@ rule diamond_nr_process_taxid_map_chunk:
     resources:
         mem="1GB",
         runtime=lambda wildcards, attempt: int(attempt * 1),
+    shadow:
+        "minimal"
     container:
         "docker://quay.io/biocontainers/gawk:5.3.0"
     shell:
@@ -157,7 +161,8 @@ rule diamond_nr_process_taxid_map_chunk:
 
 checkpoint diamond_nr_split_taxid_map:
     input:
-        p2a="results/downloads/prot.accession2taxid.FULL.gz",
+        p2a="prot.accession2taxid.1G-subset.gz",
+        # p2a="results/downloads/prot.accession2taxid.FULL.gz",
     output:
         outdir=temp(directory("results/diamond_nr_database/chunks")),
     log:
@@ -170,6 +175,8 @@ checkpoint diamond_nr_split_taxid_map:
         runtime=60,
     container:
         "docker://debian:stable-20250113"
+    shadow:
+        "minimal"
     shell:
         "mkdir -p {output} && "
         "gzip -dc {input.p2a} | tail -n +2 | split -d --lines=10000000 - {output}/chunk_ "
