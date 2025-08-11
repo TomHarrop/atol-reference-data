@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 
 
+def get_chunks(wildcards):
+    outdir = checkpoints.diamond_nr_split_taxid_map.get(**wildcards).output.outdir
+    chunkpath = Path(outdir, "chunk_{i}")
+    chunks = glob_wildcards(chunkpath).i
+
+    processed_chunk = rules.diamond_nr_process_taxid_map_chunk.output.chunkfile
+    processed_files = expand(processed_chunk, i=chunks)
+
+    return processed_files
+
+
 # Note, the docs say "build the database similarly to the Uniprot Diamond
 # database", but nr doesn't include a taxid map. Not sure if this is required.
 
@@ -40,83 +51,6 @@ rule diamond_nr_makedb:
         "printf $(date -Iseconds) > {output.timestamp}"
 
 
-# FORMAT
-# accession	accession.version	taxid	gi
-# A0A395GHB9	A0A395GHB9	1448316	0
-# A0A395GHC3	A0A395GHC3	1448316	0
-# A0A395GHC5	A0A395GHC5	1448316	0
-
-
-# rule diamond_nr_taxid_map:
-#     input:
-#         p2a="results/downloads/prot.accession2taxid.FULL.gz",
-#     output:
-#         taxid_map="results/diamond_nr_database/nr.taxid_map",
-#     log:
-#         "logs/diamond_nr_taxid_map.log",
-#     resources:
-#         runtime="1d",
-#     shadow:
-#         "minimal"
-#     container:
-#         "docker://quay.io/biocontainers/diamond:2.1.13--h13889ed_0"
-#     shell:
-#         'echo -e "accession\\taccession.version\\ttaxid\\tgi" > {output.taxid_map} '
-#         "&& "
-#         "zcat {input.p2a} "
-#         "2>> {log} "
-#         "| "
-#         "tail -n +2 "
-#         "| "
-#         'awk \'{{print $1 "\\t" $1 "\\t" $2 "\\t" 0}}\' '
-#         ">> {output.taxid_map} "
-#         "2>> {log} "
-
-
-# Mung the taxid map with R. The streaming approach with bash and awk uses
-# basically no memory but takes days to run. This is the opposite.
-# rule diamond_nr_taxid_map:
-#     input:
-#         p2a="results/downloads/prot.accession2taxid.FULL.gz",
-#         # p2a="prot.accession2taxid1000.gz",
-#     output:
-#         taxid_map="results/diamond_nr_database/nr.taxid_map",
-#         # taxid_map="nr.taxid_map",
-#     log:
-#         "logs/diamond_nr_taxid_map.log",
-#     benchmark:
-#         "logs/benchmarks/diamond_nr_taxid_map.txt"
-#     threads: 12
-#     resources:
-#         runtime="12h",
-#         mem="512GB",
-#         partitionFlag="--partition highmem",
-#     shadow:
-#         "minimal"
-#     container:
-#         "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
-#     shell:
-#         "gzip -dc {input.p2a} > in.tsv && "
-#         'Rscript -e "'
-#         "library(data.table); "
-#         "setDTthreads(0); "
-#         "getDTthreads(verbose=TRUE); "
-#         "fwrite(fread('in.tsv')[,.(accession=accession.version,accession.version=accession.version,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
-#         '" '
-#         "&> {log}"
-
-
-def get_chunks(wildcards):
-    outdir = checkpoints.diamond_nr_split_taxid_map.get(**wildcards).output.outdir
-    chunkpath = Path(outdir, "chunk_{i}")
-    chunks = glob_wildcards(chunkpath).i
-
-    processed_chunk = rules.diamond_nr_process_taxid_map_chunk.output.chunkfile
-    processed_files = expand(processed_chunk, i=chunks)
-
-    return processed_files
-
-
 rule diamond_nr_join_taxid_map_chunks:
     input:
         get_chunks,
@@ -138,6 +72,11 @@ rule diamond_nr_join_taxid_map_chunks:
         "../scripts/diamond_nr_join_taxid_map_chunks.sh"
 
 
+# FORMAT
+# accession	accession.version	taxid	gi
+# A0A395GHB9	A0A395GHB9	1448316	0
+# A0A395GHC3	A0A395GHC3	1448316	0
+# A0A395GHC5	A0A395GHC5	1448316	0
 rule diamond_nr_process_taxid_map_chunk:
     input:
         "results/diamond_nr_database/chunks/chunk_{i}",
@@ -161,7 +100,6 @@ rule diamond_nr_process_taxid_map_chunk:
 
 checkpoint diamond_nr_split_taxid_map:
     input:
-        # p2a="prot.accession2taxid.1G-subset.gz",
         p2a="results/downloads/prot.accession2taxid.FULL.gz",
     output:
         outdir=temp(directory("results/diamond_nr_database/chunks")),

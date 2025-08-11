@@ -39,9 +39,7 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_nr_join_taxid_map_chunks
-
-exit 0
+    diamond_nr_makedb
 
 # delete if everything is there, disabled for now
 if [ $? -eq 0 ]; then
