@@ -22,8 +22,7 @@ apptainer-args: ?f"-B $PWD,{tmpdir}
   --nv
   -H $(mktemp -d)
   --pwd $PWD
-  --containall --cleanenv --writable-tmpfs
-  --env SLURM_CPUS_ON_NODE=\\$SLURM_CPUS_ON_NODE"
+  --containall --cleanenv --writable-tmpfs"
 apptainer-prefix: $HOME/.apptainer/cache/library
 shadow-prefix: ?tmpdir
 # s3

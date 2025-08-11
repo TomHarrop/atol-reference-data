@@ -45,6 +45,9 @@ rule diamond_nr_makedb:
 # A0A395GHB9	A0A395GHB9	1448316	0
 # A0A395GHC3	A0A395GHC3	1448316	0
 # A0A395GHC5	A0A395GHC5	1448316	0
+
+
+
 # rule diamond_nr_taxid_map:
 #     input:
 #         p2a="results/downloads/prot.accession2taxid.FULL.gz",
@@ -73,35 +76,59 @@ rule diamond_nr_makedb:
 
 # Mung the taxid map with R. The streaming approach with bash and awk uses
 # basically no memory but takes days to run. This is the opposite.
-rule diamond_nr_taxid_map:
+# rule diamond_nr_taxid_map:
+#     input:
+#         p2a="results/downloads/prot.accession2taxid.FULL.gz",
+#         # p2a="prot.accession2taxid1000.gz",
+#     output:
+#         taxid_map="results/diamond_nr_database/nr.taxid_map",
+#         # taxid_map="nr.taxid_map",
+#     log:
+#         "logs/diamond_nr_taxid_map.log",
+#     benchmark:
+#         "logs/benchmarks/diamond_nr_taxid_map.txt"
+#     threads: 12
+#     resources:
+#         runtime="12h",
+#         mem="512GB",
+#         partitionFlag="--partition highmem",
+#     shadow:
+#         "minimal"
+#     container:
+#         "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
+#     shell:
+#         "gzip -dc {input.p2a} > in.tsv && "
+#         'Rscript -e "'
+#         "library(data.table); "
+#         "setDTthreads(0); "
+#         "getDTthreads(verbose=TRUE); "
+#         "fwrite(fread('in.tsv')[,.(accession=accession.version,accession.version=accession.version,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
+#         '" '
+#         "&> {log}"
+
+
+
+
+rule diamond_nr_split_taxid_map:
     input:
-        p2a="results/downloads/prot.accession2taxid.FULL.gz",
-        # p2a="prot.accession2taxid1000.gz",
+        p2a="prot.accession2taxid.1G-subset.gz",
+        # p2a="results/downloads/prot.accession2taxid.FULL.gz"
     output:
-        taxid_map="results/diamond_nr_database/nr.taxid_map",
-        # taxid_map="nr.taxid_map",
+        directory("results/diamond_nr_database/chunks")
     log:
-        "logs/diamond_nr_taxid_map.log",
+        "logs/diamond_nr_split_taxid_map.log"
     benchmark:
-        "logs/benchmarks/diamond_nr_taxid_map.txt"
-    threads: 12
+        "logs/benchmarks/diamond_nr_split_taxid_map.txt"
+    threads: 1
     resources:
-        runtime="12h",
-        mem="512GB",
-        partitionFlag="--partition highmem",
-    shadow:
-        "minimal"
+        mem="4GB"
     container:
-        "docker://ghcr.io/tomharrop/r-containers:r2u_24.04_cv1"
+        "docker://quay.io/biocontainers/pigz:2.8"
     shell:
-        "export R_DATATABLE_NUM_THREADS={threads} && "
-        "gzip -dc {input.p2a} > in.tsv && "
-        'Rscript -e "'
-        "library(data.table); "
-        "getDTthreads(verbose=TRUE); "
-        "fwrite(fread('in.tsv')[,.(accession=accession.version,accession.version=accession.version,taxid=taxid,gi=0)], '{output.taxid_map}', sep='\\t')"
-        '" '
-        "&> {log}"
+        "mkdir -p {output} && "
+        "pigz -dc {input.p2a} | tail -n +2 | split -d --lines=50000000 - {output}/chunk_ "
+        "2> {log}"
+
 
 
 rule expand_nr_file:
