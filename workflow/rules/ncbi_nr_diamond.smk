@@ -161,8 +161,8 @@ rule diamond_nr_process_taxid_map_chunk:
 
 checkpoint diamond_nr_split_taxid_map:
     input:
-        p2a="prot.accession2taxid.1G-subset.gz",
-        # p2a="results/downloads/prot.accession2taxid.FULL.gz",
+        # p2a="prot.accession2taxid.1G-subset.gz",
+        p2a="results/downloads/prot.accession2taxid.FULL.gz",
     output:
         outdir=temp(directory("results/diamond_nr_database/chunks")),
     log:
