@@ -47,7 +47,6 @@ rule diamond_nr_makedb:
 # A0A395GHC5	A0A395GHC5	1448316	0
 
 
-
 # rule diamond_nr_taxid_map:
 #     input:
 #         p2a="results/downloads/prot.accession2taxid.FULL.gz",
@@ -107,28 +106,74 @@ rule diamond_nr_makedb:
 #         "&> {log}"
 
 
+def get_chunks(wildcards):
+    outdir = checkpoints.diamond_nr_split_taxid_map.get(**wildcards).output.outdir
+    chunkpath = Path(outdir, "chunk_{i}")
+    chunks = glob_wildcards(chunkpath).i
+
+    processed_chunk = rules.diamond_nr_process_taxid_map_chunk.output.chunkfile
+    processed_files = expand(processed_chunk, i=chunks)
+
+    return processed_files
 
 
-rule diamond_nr_split_taxid_map:
+rule diamond_nr_join_taxid_map_chunks:
     input:
-        p2a="prot.accession2taxid.1G-subset.gz",
-        # p2a="results/downloads/prot.accession2taxid.FULL.gz"
+        get_chunks,
     output:
-        directory("results/diamond_nr_database/chunks")
+        taxid_map="results/diamond_nr_database/nr.taxid_map",
     log:
-        "logs/diamond_nr_split_taxid_map.log"
+        "logs/diamond_nr_join_taxid_map_chunks.log",
+    threads: 1
+    resources:
+        mem="2GB",
+        runtime=60,
+    benchmark:
+        "logs/benchmarks/diamond_nr_join_taxid_map_chunks.txt"
+    container:
+        "docker://debian:stable-20250113"
+    script:
+        "../scripts/diamond_nr_join_taxid_map_chunks.sh"
+
+
+rule diamond_nr_process_taxid_map_chunk:
+    input:
+        "results/diamond_nr_database/chunks/chunk_{i}",
+    output:
+        chunkfile=temp("results/diamond_nr_database/processed_chunks/chunk_{i}.tsv"),
+    log:
+        "logs/diamond_nr_taxid_map/diamond_nr_process_taxid_map_chunk/chunk_{i}.log",
+    benchmark:
+        "logs/benchmarks/diamond_nr_process_taxid_map_chunk/chunk_{i}.txt"
+    threads: 1
+    resources:
+        mem="1GB",
+        runtime=lambda wildcards, attempt: int(attempt * 1),
+    container:
+        "docker://quay.io/biocontainers/gawk:5.3.0"
+    shell:
+        "awk -v OFS='\\t' '{{print $1, $1, $2, 0}}' {input} > {output} 2> {log}"
+
+
+checkpoint diamond_nr_split_taxid_map:
+    input:
+        p2a="results/downloads/prot.accession2taxid.FULL.gz",
+    output:
+        outdir=temp(directory("results/diamond_nr_database/chunks")),
+    log:
+        "logs/diamond_nr_split_taxid_map.log",
     benchmark:
         "logs/benchmarks/diamond_nr_split_taxid_map.txt"
     threads: 1
     resources:
-        mem="4GB"
+        mem="2GB",
+        runtime=60,
     container:
-        "docker://quay.io/biocontainers/pigz:2.8"
+        "docker://debian:stable-20250113"
     shell:
         "mkdir -p {output} && "
-        "pigz -dc {input.p2a} | tail -n +2 | split -d --lines=50000000 - {output}/chunk_ "
+        "gzip -dc {input.p2a} | tail -n +2 | split -d --lines=10000000 - {output}/chunk_ "
         "2> {log}"
-
 
 
 rule expand_nr_file:

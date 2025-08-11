@@ -39,7 +39,7 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    diamond_nr_makedb
+    diamond_nr_join_taxid_map_chunks
 
 exit 0
 
