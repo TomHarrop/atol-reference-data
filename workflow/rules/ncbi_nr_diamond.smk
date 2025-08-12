@@ -27,7 +27,7 @@ rule diamond_nr_makedb:
         names=to_storage("taxdump/names.dmp", bucket_name="ncbi"),
     output:
         dmnd=to_storage("diamond/nr.dmnd", bucket_name="nr_diamond"),
-        timestamp=to_storage("diamond/TIMESTAMP"),
+        timestamp=to_storage("diamond/TIMESTAMP", bucket_name="nr_diamond"),
     log:
         "logs/diamond_makedb.log",
     threads: 24

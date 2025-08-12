@@ -11,6 +11,7 @@ rule diamond_makedb:
         dmnd=to_storage(
             "diamond/reference_proteomes.dmnd", bucket_name="uniprot_diamond"
         ),
+        timestamp=to_storage("diamond/TIMESTAMP", bucket_name="uniprot_diamond"),
     log:
         "logs/diamond_makedb.log",
     threads: 24
@@ -30,6 +31,8 @@ rule diamond_makedb:
         "--taxonnodes {input.nodes} "
         "-d {output.dmnd} "
         "2>> {log} "
+        "&& "
+        "printf $(date -Iseconds) > {output.timestamp}"
 
 
 rule diamond_get_taxid_map:
