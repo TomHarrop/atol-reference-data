@@ -24,6 +24,7 @@ rule diamond_nr_makedb:
         sequences="results/diamond_nr_database/nr.fasta",
         taxid_map="results/diamond_nr_database/nr.taxid_map",
         nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
+        names=to_storage("taxdump/names.dmp", bucket_name="ncbi"),
     output:
         dmnd=to_storage("diamond/nr.dmnd", bucket_name="nr_diamond"),
         timestamp=to_storage("diamond/TIMESTAMP"),
@@ -45,6 +46,7 @@ rule diamond_nr_makedb:
         "--in {input.sequences} "
         "--taxonmap {input.taxid_map} "
         "--taxonnodes {input.nodes} "
+        "--taxonnames {input.names} "
         "-d {output.dmnd} "
         "2>> {log} "
         "&& "

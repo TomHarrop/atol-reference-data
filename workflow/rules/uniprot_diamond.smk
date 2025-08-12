@@ -6,8 +6,11 @@ rule diamond_makedb:
         taxid_map="results/diamond/reference_proteomes.taxid_map",
         sequences="results/diamond/reference_proteomes.fasta.gz",
         nodes=to_storage("taxdump/nodes.dmp", bucket_name="ncbi"),
+        names=to_storage("taxdump/names.dmp", bucket_name="ncbi"),
     output:
-        dmnd=to_storage("diamond/reference_proteomes.dmnd", bucket_name="uniprot_diamond"),
+        dmnd=to_storage(
+            "diamond/reference_proteomes.dmnd", bucket_name="uniprot_diamond"
+        ),
     log:
         "logs/diamond_makedb.log",
     threads: 24
