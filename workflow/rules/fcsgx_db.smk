@@ -17,7 +17,7 @@ rule fcsgx_download_db:
     log:
         "logs/fcsgx_download_db.log",
     resources:
-        runtime=10,
+        runtime=60,
     shadow:
         "minimal"
     container:
@@ -26,8 +26,8 @@ rule fcsgx_download_db:
         "cp {input.manifest} ./manifest.txt && "
         "mkdir {params.outdir} && "
         "sync_files "
-        "--mft manifest.txt "
-        "--dir {params.outdir} "
+        "--mft $( readlink -f manifest.txt ) "
+        "--dir $( readlink -f {params.outdir} ) "
         "get "
         "&> {log} "
 
