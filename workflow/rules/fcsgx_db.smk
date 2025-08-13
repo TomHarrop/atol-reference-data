@@ -1,7 +1,5 @@
 
 rule fcsgx_download_db:
-    input:
-        manifest=to_storage("manifest.txt", bucket_name="fcsgx"),
     output:
         to_storage("fcsgx/all.README.txt", bucket_name="fcsgx"),
         to_storage("fcsgx/all.assemblies.tsv", bucket_name="fcsgx"),
@@ -14,6 +12,7 @@ rule fcsgx_download_db:
         to_storage("fcsgx/all.taxa.tsv", bucket_name="fcsgx"),
     params:
         outdir=subpath(subpath(output[0], parent=True), basename=True),
+        manifest_url=fcsgx_manifest,
     log:
         "logs/fcsgx_download_db.log",
     resources:
@@ -23,10 +22,9 @@ rule fcsgx_download_db:
     container:
         "https://ftp.ncbi.nlm.nih.gov/genomes/TOOLS/FCS/releases/0.5.5/fcs-gx.sif"
     shell:
-        "cp {input.manifest} ./manifest.txt && "
         "mkdir {params.outdir} && "
         "sync_files "
-        "--mft $( readlink -f manifest.txt ) "
+        "--mft {params.manifest_url} "
         "--dir $( readlink -f {params.outdir} ) "
         "get "
         "&> {log} "
