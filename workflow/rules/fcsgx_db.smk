@@ -1,7 +1,7 @@
 
 rule fcsgx_download_db:
     input:
-        manifest="results/fcsgx_files/manifest.txt",
+        manifest=to_storage("manifest.txt", bucket_name="fcsgx"),
     output:
         to_storage("fcsgx/all.README.txt", bucket_name="fcsgx"),
         to_storage("fcsgx/all.assemblies.tsv", bucket_name="fcsgx"),
@@ -33,7 +33,7 @@ rule fcsgx_download_db:
 
 rule fcsgx_get_manifest:
     output:
-        manifest="results/fcsgx_files/manifest.txt",
+        manifest=to_storage("manifest.txt", bucket_name="fcsgx"),
     params:
         url=fcsgx_manifest,
     log:
