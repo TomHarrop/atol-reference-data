@@ -16,7 +16,7 @@ rule fcsgx_download_db:
     log:
         "logs/fcsgx_download_db.log",
     resources:
-        runtime=60,
+        runtime="12h",
     shadow:
         "minimal"
     container:
@@ -29,19 +29,3 @@ rule fcsgx_download_db:
         "get "
         "&> {log} "
 
-
-rule fcsgx_get_manifest:
-    output:
-        manifest=to_storage("manifest.txt", bucket_name="fcsgx"),
-    params:
-        url=fcsgx_manifest,
-    log:
-        "logs/fcsgx_get_manifest.log",
-    resources:
-        runtime=1,
-    shadow:
-        "minimal"
-    container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
-    shell:
-        "wget {params.url} -O {output.manifest} &> {log}"
