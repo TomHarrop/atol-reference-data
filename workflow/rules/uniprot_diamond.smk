@@ -29,6 +29,7 @@ rule diamond_makedb:
         "--in {input.sequences} "
         "--taxonmap {input.taxid_map} "
         "--taxonnodes {input.nodes} "
+        "--taxonnames {input.names} "
         "-d {output.dmnd} "
         "2>> {log} "
         "&& "
