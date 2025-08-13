@@ -23,9 +23,10 @@ rule fcsgx_download_db:
     container:
         "https://ftp.ncbi.nlm.nih.gov/genomes/TOOLS/FCS/releases/0.5.5/fcs-gx.sif"
     shell:
-        "mkdir fcsgx && "
+        "cp {input.manifest} ./manifest.txt && "
+        "mkdir {params.outdir} && "
         "sync_files "
-        "--mft {input.manifest} "
+        "--mft manifest.txt "
         "--dir {params.outdir} "
         "get "
         "&> {log} "
