@@ -17,7 +17,7 @@ rule fcsgx_download_db:
     log:
         "logs/fcsgx_download_db.log",
     resources:
-        runtime=120,
+        runtime=10,
     shadow:
         "minimal"
     container:
