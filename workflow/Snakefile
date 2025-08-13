@@ -6,12 +6,13 @@ configfile: "config/config.yaml"
 
 include: "rules/common.smk"
 include: "rules/busco_databases.smk"
-include: "rules/uniprot_diamond.smk"
+include: "rules/fcsgx_db.smk"
+include: "rules/kraken_nt.smk"
+include: "rules/ncbi_nr_diamond.smk"
 include: "rules/ncbi_nucleotide_blast.smk"
 include: "rules/ncbi_taxdump.smk"
-include: "rules/kraken_nt.smk"
+include: "rules/uniprot_diamond.smk"
 include: "rules/uniprot_reference_proteomes.smk"
-include: "rules/ncbi_nr_diamond.smk"
 include: "rules/vecscreen.smk"
 
 
@@ -21,6 +22,7 @@ rule all:
         rules.busco_databases_target.input,
         rules.diamond_makedb.output,
         rules.diamond_nr_makedb.output,
+        rules.fcsgx_download_db.output,
         rules.ncbi_taxdump.output,
         rules.upload_blast_db_files.output,
         rules.upload_kraken_nt_db.output,
