@@ -1,22 +1,53 @@
+fcsgx_files = [
+    "assemblies.tsv",
+    "blast_div.tsv.gz",
+    "gxi",
+    "gxs",
+    "manifest",
+    "meta.jsonl",
+    "README.txt",
+    "seq_info.tsv.gz",
+    "taxa.tsv",
+]
+
+rule fcsgx_target:
+    input:
+        [to_storage(f"fcsgx/all.{x}", bucket_name="fcsgx") for x in fcsgx_files ]
+
+
+rule upload_fcsgx_component:
+    input:
+        "results/fcsgx/all.{fcsgx_file}",
+    output:
+        to_storage("fcsgx/all.{fcsgx_file}", bucket_name="fcsgx"),
+    resources:
+        runtime="6h",
+        storage_uploads=check_concurrent_storage_uploads,
+    container:
+        "docker://debian:stable-20250113"
+    shell:
+        "cp -r {input} {output} "
+
 
 rule fcsgx_download_db:
     output:
-        to_storage("fcsgx/all.README.txt", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.assemblies.tsv", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.blast_div.tsv.gz", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.gxi", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.gxs", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.manifest", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.meta.jsonl", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.seq_info.tsv.gz", bucket_name="fcsgx"),
-        to_storage("fcsgx/all.taxa.tsv", bucket_name="fcsgx"),
+        # "results/fcsgx/all.README.txt",
+        # "results/fcsgx/all.assemblies.tsv",
+        # "results/fcsgx/all.blast_div.tsv.gz",
+        # "results/fcsgx/all.gxi",
+        # "results/fcsgx/all.gxs",
+        # "results/fcsgx/all.manifest",
+        # "results/fcsgx/all.meta.jsonl",
+        # "results/fcsgx/all.seq_info.tsv.gz",
+        # "results/fcsgx/all.taxa.tsv",
+        expand("results/fcsgx/all.{fcsgx_file}", fcsgx_file=fcsgx_files)
     params:
         outdir=subpath(subpath(output[0], parent=True), basename=True),
         manifest_url=fcsgx_manifest,
     log:
         "logs/fcsgx_download_db.log",
     resources:
-        runtime="12h",
+        runtime="6h",
     shadow:
         "minimal"
     container:
@@ -28,4 +59,3 @@ rule fcsgx_download_db:
         "--dir $( readlink -f {params.outdir} ) "
         "get "
         "&> {log} "
-
