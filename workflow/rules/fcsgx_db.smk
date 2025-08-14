@@ -10,9 +10,10 @@ fcsgx_files = [
     "taxa.tsv",
 ]
 
+
 rule fcsgx_target:
     input:
-        [to_storage(f"fcsgx/all.{x}", bucket_name="fcsgx") for x in fcsgx_files ]
+        [to_storage(f"fcsgx/all.{x}", bucket_name="fcsgx") for x in fcsgx_files],
 
 
 rule upload_fcsgx_component:
@@ -40,9 +41,9 @@ rule fcsgx_download_db:
         # "results/fcsgx/all.meta.jsonl",
         # "results/fcsgx/all.seq_info.tsv.gz",
         # "results/fcsgx/all.taxa.tsv",
-        expand("results/fcsgx/all.{fcsgx_file}", fcsgx_file=fcsgx_files)
+        expand("results/fcsgx/all.{fcsgx_file}", fcsgx_file=fcsgx_files),
     params:
-        outdir=subpath(subpath(output[0], parent=True), basename=True),
+        outdir=subpath(output[0], parent=True),
         manifest_url=fcsgx_manifest,
     log:
         "logs/fcsgx_download_db.log",
@@ -53,9 +54,8 @@ rule fcsgx_download_db:
     container:
         "https://ftp.ncbi.nlm.nih.gov/genomes/TOOLS/FCS/releases/0.5.5/fcs-gx.sif"
     shell:
-        "mkdir {params.outdir} && "
         "sync_files "
         "--mft {params.manifest_url} "
-        "--dir $( readlink -f {params.outdir} ) "
+        "--dir {params.outdir} "
         "get "
         "&> {log} "
