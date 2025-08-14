@@ -22,7 +22,7 @@ rule upload_fcsgx_component:
     output:
         to_storage("fcsgx/all.{fcsgx_file}", bucket_name="fcsgx"),
     resources:
-        runtime="6h",
+        runtime="2h",
         storage_uploads=check_concurrent_storage_uploads,
     container:
         "docker://debian:stable-20250113"
@@ -32,15 +32,6 @@ rule upload_fcsgx_component:
 
 rule fcsgx_download_db:
     output:
-        # "results/fcsgx/all.README.txt",
-        # "results/fcsgx/all.assemblies.tsv",
-        # "results/fcsgx/all.blast_div.tsv.gz",
-        # "results/fcsgx/all.gxi",
-        # "results/fcsgx/all.gxs",
-        # "results/fcsgx/all.manifest",
-        # "results/fcsgx/all.meta.jsonl",
-        # "results/fcsgx/all.seq_info.tsv.gz",
-        # "results/fcsgx/all.taxa.tsv",
         expand("results/fcsgx/all.{fcsgx_file}", fcsgx_file=fcsgx_files),
     params:
         outdir=subpath(output[0], parent=True),
@@ -48,7 +39,7 @@ rule fcsgx_download_db:
     log:
         "logs/fcsgx_download_db.log",
     resources:
-        runtime="6h",
+        runtime="10h",
     shadow:
         "minimal"
     container:
