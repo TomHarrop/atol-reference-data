@@ -40,6 +40,7 @@ rule fcsgx_download_db:
         "logs/fcsgx_download_db.log",
     resources:
         runtime="3d",
+        partitionFlag="--partition long",
     shadow:
         "minimal"
     container:
