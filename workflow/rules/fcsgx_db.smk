@@ -45,8 +45,13 @@ rule fcsgx_download_db:
     container:
         "https://ftp.ncbi.nlm.nih.gov/genomes/TOOLS/FCS/releases/0.5.5/fcs-gx.sif"
     shell:
+        "while ! "
         "sync_files "
         "--mft {params.manifest_url} "
         "--dir {params.outdir} "
         "get "
-        "&> {log} "
+        "&>> {log} "
+        "; "
+        "do "
+        "printf 'Retrying at %s\\n' $(date) ; "
+        "done"
