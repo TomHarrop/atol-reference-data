@@ -39,9 +39,9 @@ snakemake \
     --cores 12 \
     --notemp \
     --local-cores "${SLURM_CPUS_ON_NODE}" \
-    fcsgx_target
+    busco_databases_target
 
-# delete if everything is there, disabled for now
+# delete if everything is there
 if [ $? -eq 0 ]; then
     printf "Deleting temp files"
     snakemake \
@@ -49,6 +49,6 @@ if [ $? -eq 0 ]; then
         --delete-temp-output \
         --cleanup-shadow \
         --local-cores "${SLURM_CPUS_ON_NODE}" \
-        fcsgx_target 
+        busco_databases_target 
 fi
 
