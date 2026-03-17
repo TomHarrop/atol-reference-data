@@ -1,9 +1,9 @@
 blast_db_directory_url: ftp://ftp.ncbi.nlm.nih.gov/blast/db/v5
 busco_dataset_names: "config/busco_dataset_names.txt"
-busco_dataset_version: "odb10"
+busco_dataset_version: "odb12"
 busco_directory_url: https://busco-data.ezlab.org/v5/data
 busco_manifest_path: file_versions.tsv
-fcsgx_manifest: "https://ncbi-fcs-gx.s3.amazonaws.com/gxdb/latest/all.manifest"
+fcsgx_manifest: "https://ftp.ncbi.nlm.nih.gov/genomes/TOOLS/FCS/database/r2023-01-24/all.manifest"
 kraken_core_nt_db_url: "https://genome-idx.s3.amazonaws.com/kraken/k2_core_nt_20250609.tar.gz"
 kraken_core_nt_db_checksum: "https://genome-idx.s3.amazonaws.com/kraken/core_nt_20250609/core_nt.md5"
 nr.gz: "ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz"
