@@ -4,27 +4,24 @@
 configfile: "config/config.yaml"
 
 
+# Note: unused buckets have been commented out.
 include: "rules/common.smk"
-include: "rules/busco_databases.smk"
+# include: "rules/busco_databases.smk"
 include: "rules/fcsgx_db.smk"
-include: "rules/kraken_nt.smk"
-include: "rules/ncbi_nr_diamond.smk"
+# include: "rules/kraken_nt.smk"
+# include: "rules/ncbi_nr_diamond.smk"
 include: "rules/ncbi_nucleotide_blast.smk"
-include: "rules/ncbi_taxdump.smk"
+# include: "rules/ncbi_taxdump.smk"
 include: "rules/uniprot_diamond.smk"
-include: "rules/uniprot_reference_proteomes.smk"
-include: "rules/vecscreen.smk"
+# include: "rules/uniprot_reference_proteomes.smk"
+# include: "rules/vecscreen.smk"
+include: "rules/annotationqc.smk"
 
 
 rule all:
     default_target: True
     input:
-        rules.busco_databases_target.input,
+        rules.annotationqc.output,
         rules.diamond_makedb.output,
-        rules.diamond_nr_makedb.output,
         rules.fcsgx_target.input,
-        rules.ncbi_taxdump.output,
         rules.upload_blast_db_files.output,
-        rules.upload_kraken_nt_db.output,
-        rules.upload_uniprot_files.output,
-        rules.upload_vecscreen_files.output,

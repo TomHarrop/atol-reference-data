@@ -21,6 +21,7 @@ buckets:
   nr_diamond: "s3://pawsey1132.atol.refdata.nr.diamond"
   uniprot_diamond: "s3://pawsey1132.atol.refdata.uniprot.diamond"
   vecscreen: "s3://pawsey1132.atol.refdata.vecscreen"
+  annotationqc: "s3://pawsey1132.atol.refdata.annotationqc"
 # output_prefix: "fs://test/results"
 taxdump_url: ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
 uniprot_directory_url: ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes
