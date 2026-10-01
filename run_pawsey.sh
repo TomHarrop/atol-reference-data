@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=atol_refdata
-#SBATCH --partition=long
-#SBATCH --time=3-00
+#SBATCH --time=1-00
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --mem=8g
@@ -18,7 +17,7 @@ unset SBATCH_EXPORT
 # Application specific commands:
 set -eux
 
-source /scratch/pawsey1132/tharrop/atol-reference-data/venv
+source /scratch/pawsey1132/tharrop/atol-reference-data/venv/bin/activate
 
 printf "TMPDIR: %s\n" "${TMPDIR}"
 printf "SLURM_CPUS_ON_NODE: %s\n" "${SLURM_CPUS_ON_NODE}"
