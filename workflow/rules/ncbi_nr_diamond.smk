@@ -63,7 +63,7 @@ rule diamond_nr_join_taxid_map_chunks:
     threads: 1
     resources:
         mem="2GB",
-        runtime=60,
+        runtime=180,
     benchmark:
         "logs/benchmarks/diamond_nr_join_taxid_map_chunks.txt"
     shadow:
@@ -149,7 +149,7 @@ rule download_ncbi:
     log:
         "logs/download_generic/{filename}.log",
     resources:
-        runtime=lambda wildcards, attempt: int(attempt * 30),  # TODO check filename
+        runtime=lambda wildcards, attempt: int(attempt * 300),  # TODO check filename
     shadow:
         "minimal"
     container:
