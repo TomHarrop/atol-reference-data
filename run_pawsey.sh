@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=atol_refdata
-#SBATCH --time=1-00
+#SBATCH --time=0-18
 #SBATCH --cpus-per-task=2
 #SBATCH --ntasks=1
 #SBATCH --mem=8g
