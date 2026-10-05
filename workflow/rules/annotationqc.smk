@@ -50,6 +50,12 @@ rule ete_db:
         "mv $PWD/.local/share/ete/taxa.sqlite {output.taxa_sqlite}"
 
 
+# Note, the file at https://omabrowser.org/All/LUCA.h5 redirects to a Zenodo
+# record with versioned DBs (https://zenodo.org/records/20814376). The current
+# version is https://zenodo.org/records/20814376/files/LUCA.h5, but this seems
+# to be incompatible with omark 0.3.1. We can't upgrade omark because it
+# requires an old version of libsqlite, which is incompatible with the version
+# of python used by BUSCO v6.
 rule download_omark_db:
     output:
         omark_db=temp("results/annotationqc_files/LUCA.h5"),
@@ -58,10 +64,12 @@ rule download_omark_db:
     shadow:
         "minimal"
     container:
-        "docker://quay.io/biocontainers/gnu-wget:1.18--hb829ee6_10"
+        "docker://quay.io/biocontainers/wget:1.25.0"
     resources:
         runtime="10h",
     params:
-        file_url="https://omabrowser.org/All/LUCA.h5",
+        file_url="https://zenodo.org/records/17826591/files/LUCA.h5",
+        md5sum="0a437cdd37b20149da5ec79a73fa6ca4",
     shell:
-        "wget {params.file_url} -O {output.omark_db} &> {log} "
+        "wget {params.file_url} -O {output.omark_db} &> {log} && "
+        "md5sum -cw <( echo {params.md5sum} {output.omark_db} ) &>> {log}"
